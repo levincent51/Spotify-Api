@@ -14,7 +14,7 @@
     "react-spotify-web-playback": "^0.8.2",
     "spotify-web-api-js": "^0.22.1"
   },
-  "homepage": ".",
+
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
