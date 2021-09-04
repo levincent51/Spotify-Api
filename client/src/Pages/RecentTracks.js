@@ -3,11 +3,10 @@ import { spotifyApi } from "../components/spotifyAPI";
 import format from "date-fns/format";
 import { millisToMinutesAndSeconds } from "../components/functions";
 
-
 const TableItem = (item, index) => (
   <tr key={item.played_at}>
     <td>
-    <a href={item.track.uri} className="row-link">
+      <a href={item.track.uri} className="row-link">
         {millisToMinutesAndSeconds(item.track.duration_ms)}
       </a>
     </td>
@@ -55,7 +54,7 @@ const RecentTracks = () => {
       {RecentlyPlayed ? (
         <div className="recently-played">
           <h2>Recently played tracks</h2>
-          <hr/>
+
           <table className="table">
             <thead>
               <tr>
