@@ -10,5 +10,8 @@
     "path": "^0.12.7",
     "querystring": "~0.2.0",
     "request": "^2.88.2"
+  },
+  "scripts": {
+    "start": "node authorization_code/server.js"
   }
 }

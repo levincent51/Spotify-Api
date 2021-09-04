@@ -1,4 +1,6 @@
-const CLIENT_SERVER = "http://localhost:3000/#";
+require('dotenv').config();
+
+const CLIENT_SERVER = "https://zealous-bose-5bc52a.netlify.app/#"; // https://zealous-bose-5bc52a.netlify.app http://localhost:3000
 var express = require("express"); // Express web server framework
 var request = require("request"); // "Request" library
 var querystring = require("querystring");
@@ -7,7 +9,7 @@ const cors = require("cors");
 
 var client_id = "67e476d47ae849a397e99e88583bb1a1"; // Your client id
 var client_secret = "6ed3f24ecbb74117b8bd5effa4e158d7"; // Your secret
-var redirect_uri = "http://localhost:8888/callback"; // Or Your redirect uri
+var redirect_uri = "https://react-express-spotify.herokuapp.com/callback"; // Or Your redirect uri https://react-express-spotify.herokuapp.com/ http://localhost:8888/callback
 
 /**
  * Generates a random string containing numbers and letters
@@ -30,7 +32,7 @@ var stateKey = "spotify_auth_state";
 var app = express();
 
 var allowCrossDomain = function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000", "https://zealous-bose-5bc52a.netlify.app");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
@@ -192,8 +194,8 @@ app.get("/refresh_token", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.redirect(CLIENT_SERVER);
+  res.send("serverwork")
 });
 
 console.log("Listening on 8888");
-app.listen(8888);
+app.listen(process.env.PORT || 8888);

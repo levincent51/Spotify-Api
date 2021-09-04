@@ -31,44 +31,44 @@ const TopTracks = () => {
         }
       });
 
-      spotifyApi.getNewReleases().then((response)=> {
-          console.log(response)
-      })
+    spotifyApi.getNewReleases().then((response) => {
+      console.log(response);
+    });
   }, [timeRange]);
-
 
   return (
     <div>
-        <div className="container">
-          <div className="bloc-tabs">
-            <button
-              className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
-              onClick={() => toggleTab(1, "short_term")}
-            >
-              4 weeks
-            </button>
-            <button
-              className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
-              onClick={() => toggleTab(2, "medium_term")}
-            >
-              6 months
-            </button>
-            <button
-              className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
-              onClick={() => toggleTab(3, "long_term")}
-            >
-              All time
-            </button>
-          </div>
-          {tracks ? (
+      <h2>Top Tracks</h2>
+
+      <div className="container">
+        <div className="bloc-tabs">
+          <button
+            className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
+            onClick={() => toggleTab(1, "short_term")}
+          >
+            4 weeks
+          </button>
+          <button
+            className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
+            onClick={() => toggleTab(2, "medium_term")}
+          >
+            6 months
+          </button>
+          <button
+            className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
+            onClick={() => toggleTab(3, "long_term")}
+          >
+            All time
+          </button>
+        </div>
+        {tracks ? (
           <div className="content-tabs">
             <div
               className={
                 toggleState === 1 ? "content  active-content" : "content"
               }
             >
-              <h2>Top Tracks</h2>
-              <hr />
+
 
               {tracks.items.map((track, key) => (
                 <TrackInfo key={key} track={track} />
@@ -80,8 +80,7 @@ const TopTracks = () => {
                 toggleState === 2 ? "content  active-content" : "content"
               }
             >
-              <h2>Top Tracks</h2>
-              <hr />
+       
 
               {tracks.items.map((track, key) => (
                 <TrackInfo key={key} track={track} />
@@ -93,17 +92,17 @@ const TopTracks = () => {
                 toggleState === 3 ? "content  active-content" : "content"
               }
             >
-              <h2>Top Tracks</h2>
-              <hr />
+    
 
               {tracks.items.map((track, key) => (
                 <TrackInfo key={key} track={track} />
               ))}
             </div>
-          </div>): (
-        <b>LOADING</b>)}
-        </div>
-      
+          </div>
+        ) : (
+          <b>LOADING</b>
+        )}
+      </div>
     </div>
   );
 };
