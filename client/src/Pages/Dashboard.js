@@ -9,12 +9,14 @@ import { spotifyApi } from "../components/spotifyAPI";
 
 export default function Dashboard({ token }) {
   const [isPlaying, setIsPlaying] = useState(false);
-
+  // Note the spotify web player SDK is in beta so performance is janky
   useEffect(() => {
     const interval = setInterval(() => {
       spotifyApi.getMyCurrentPlaybackState().then((response) => {
         if (response) {
-          setIsPlaying(true);
+          if (response.is_playing) {
+            setIsPlaying(true);
+          }
         } else if (!response) {
           setIsPlaying(false);
         }
