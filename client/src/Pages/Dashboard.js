@@ -11,28 +11,25 @@ export default function Dashboard({ token }) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval( () => {
-    spotifyApi.getMyCurrentPlaybackState().then((response) => {
-      if (response) {
-        setIsPlaying(true);
-      } else if(!response) {
-        setIsPlaying(false)
-      }
-    })
-  }, 2000)
-    return () => clearInterval(interval)
-
+    const interval = setInterval(() => {
+      spotifyApi.getMyCurrentPlaybackState().then((response) => {
+        if (response) {
+          setIsPlaying(true);
+        } else if (!response) {
+          setIsPlaying(false);
+        }
+      });
+    }, 2000);
+    return () => clearInterval(interval);
   }, [isPlaying]);
-
-
 
   //return should return, getTOPTRACKS, make playlist
   // DashBoard should tell us our favourite genre based on our top artist
   return (
     <BrowserRouter>
       <div /* will make a header bar FOR ALL OUR BROWSER ROUTES*/>
-      <Navbar/>
-        
+        <Navbar />
+
         <Switch>
           <Route path="/RecentTracks">
             <RecentTracks />
@@ -47,18 +44,18 @@ export default function Dashboard({ token }) {
             <h1>WELCOME TO SPOTIFY API</h1>
           </Route>
         </Switch>
-      {isPlaying ? (
-          <div className='player'>
-          <b>Currently Playing</b>
-          <SpotifyPlayer
-            token={token}
-            syncExternalDevice={true}
-            syncExternalDeviceInterval={3}
-          />
+        {isPlaying ? (
+          <div className="player">
+            <b>Currently Playing</b>
+            <SpotifyPlayer
+              token={token}
+              syncExternalDevice={true}
+              syncExternalDeviceInterval={3}
+            />
           </div>
         ) : (
-          <div className='player'>
-          <b>Not Playing Anything Currently</b>
+          <div className="player">
+            <b>Currently Not Playing Anything </b>
           </div>
         )}
       </div>
