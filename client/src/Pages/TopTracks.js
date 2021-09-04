@@ -68,8 +68,6 @@ const TopTracks = () => {
                 toggleState === 1 ? "content  active-content" : "content"
               }
             >
-
-
               {tracks.items.map((track, key) => (
                 <TrackInfo key={key} track={track} />
               ))}
@@ -80,8 +78,6 @@ const TopTracks = () => {
                 toggleState === 2 ? "content  active-content" : "content"
               }
             >
-       
-
               {tracks.items.map((track, key) => (
                 <TrackInfo key={key} track={track} />
               ))}
@@ -92,8 +88,6 @@ const TopTracks = () => {
                 toggleState === 3 ? "content  active-content" : "content"
               }
             >
-    
-
               {tracks.items.map((track, key) => (
                 <TrackInfo key={key} track={track} />
               ))}
