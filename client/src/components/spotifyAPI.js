@@ -68,7 +68,8 @@ export const getAccessToken = () => {
   return local_access_token;
 };
 
+spotifyApi.setAccessToken(token);
 // SET OUR TOKEN with our spotify-web-api-js
 export const token = getAccessToken();
 
-spotifyApi.setAccessToken(token);
+
