@@ -1,0 +1,40 @@
+.login {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  background-color: rgb(255, 255, 255);
+}
+
+.login > img {
+  width: auto;
+  height: 20vh;
+}
+
+.login > p {
+  font-size: larger;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+}
+.login > a {
+  padding: 20px;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: larger;
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  background-color: #1db954;
+
+  transition: 0.3s;
+}
+
+.login > a:hover {
+  padding: 20px;
+  border-radius: 30px;
+
+  font-size: larger;
+  font-weight: bold;
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #1ed760;
+}
