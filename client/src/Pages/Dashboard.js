@@ -1,17 +1,17 @@
-import React, { Component, useState, useEffect } from "react";
-import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
+import React, {  useState, useEffect } from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { LogoutButton } from "../components/functions";
 import Navbar from "../components/Navbar";
 import TopTracks from "./TopTracks";
 import RecentTracks from "./RecentTracks";
 import SpotifyPlayer from "react-spotify-web-playback";
-import { spotifyApi } from "../components/spotifyAPI";
+import { spotifyApi, token } from "../components/spotifyAPI";
 
-export default function Dashboard({ token }) {
+export default function Dashboard() {
   const [isPlaying, setIsPlaying] = useState(false);
   // Note the spotify web player SDK is in beta so performance is janky
   useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = setInterval( async () => {
       spotifyApi.getMyCurrentPlaybackState().then((response) => {
         if (response) {
           if (response.is_playing) {
@@ -21,7 +21,7 @@ export default function Dashboard({ token }) {
           setIsPlaying(false);
         }
       });
-    }, 2000);
+    }, 150);
     return () => clearInterval(interval);
   }, [isPlaying]);
 
@@ -52,7 +52,7 @@ export default function Dashboard({ token }) {
             <SpotifyPlayer
               token={token}
               syncExternalDevice={true}
-              syncExternalDeviceInterval={3}
+              syncExternalDeviceInterval={1}
             />
           </div>
         ) : (

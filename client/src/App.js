@@ -5,9 +5,11 @@ import Dashboard from "./Pages/Dashboard";
 
 import { token } from "./components/spotifyAPI";
 
+
 function App() {
+
   return (
-    <div className="App">{token ? <Dashboard token={token} /> : <Login />}</div>
+    <div className="App">{token ? <Dashboard/> : <Login />}</div>
   );
 }
 
