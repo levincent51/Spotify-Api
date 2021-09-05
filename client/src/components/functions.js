@@ -21,17 +21,6 @@ export function millisToMinutesAndSeconds(millis) {
   return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 }
 
-// Retrieve object stored in localStorage
-
-export const getObject = (key) => {
-  const value = window.sessionStorage.getItem(key);
-  if (value === null || value === "undefined") return null;
-  return JSON.parse(value);
-};
-
-// Store object as string in storage
-export const setObject = (key, value) =>
-  window.sessionStorage.setItem(key, JSON.stringify(value));
 
 export const LogoutButton = () => {
   window.localStorage.clear();

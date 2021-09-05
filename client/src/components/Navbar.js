@@ -1,19 +1,38 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <div className="navbar">
-      <Link to="/">HOME</Link>
-      <ul>
-        <li>
-          <Link to="/TopTracks">Top Tracks</Link>
-        </li>
-        <li>
-          <Link to="/RecentTracks">RecentlyPlayed</Link>
-        </li>
-      </ul>
-      <Link to="/logout">Logout</Link>
+      <li>
+        <NavLink to="/">HOME</NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/TopTracks"
+          activeStyle={{
+            fontWeight: "bold",
+            color: "green",
+          }}
+        >
+          Top Tracks
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/RecentTracks"
+          activeStyle={{
+            fontWeight: "bold",
+            color: "green",
+          }}
+        >
+          RecentlyPlayed
+        </NavLink>
+      </li>
+      <li style={{ float: "right" }}>
+  
+        <NavLink to="/logout">Logout</NavLink>
+      </li>
     </div>
   );
 };

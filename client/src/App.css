@@ -1,6 +1,6 @@
 .App {
-  text-align: center;
   font-family: 'Montserrat', sans-serif;
+  text-align: center;
 }
 
 
@@ -16,6 +16,9 @@
   color: white;
 }
 
+h2 {
+  text-align: center;
+}
 .App-title {
   font-size: 1.5em;
 }
@@ -32,11 +35,42 @@
 .navbar {
   position: sticky; 
   top:0;
+  left:0;
+  
+  width: 100%;
+  background-color: rgb(255, 255, 255);
   display: inline-block;
 }
-.navbar > ul > li {
-  display: inline-block;
-  
+
+.navbar  > li {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 20px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.navbar  > li > a {
+
+  text-decoration: none;
+  color: black;
+  padding: 20px 16px;
+  text-decoration: none;
+  font-size: 17px;
+
+}
+
+
+
+.navbar  > li:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.navbar > li:last-child {
+  border-right: none;
 }
 
 .bloc-tabs {
@@ -78,7 +112,7 @@
   transform: translateX(-50%);
   width: calc(100% + 2px);
   height: 5px;
-  background: rgb(88, 147, 241);
+  background: green;
 }
 
 button {

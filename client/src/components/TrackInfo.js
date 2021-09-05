@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 // our track card for displaying artist, trackname and the picture
 const TrackInfo = ({ track }) => {
