@@ -1,9 +1,9 @@
 import React, { Component, useState, useEffect } from "react";
-import { spotifyApi } from "../components/spotifyAPI";
+import { spotifyApi, token, getAccessToken } from "../components/spotifyAPI";
 import format from "date-fns/format";
 import { millisToMinutesAndSeconds } from "../components/functions";
 
-const TableItem = (item, index) => (
+const TableItem = (item) => (
   <tr key={item.played_at}>
     <td>
       <a href={item.track.uri} className="row-link">
@@ -45,7 +45,10 @@ const RecentTracks = () => {
             items: response.items,
           });
         }
-      });
+      })
+      .catch(() => {
+        getAccessToken()
+      });;
   }, []);
   console.log(RecentlyPlayed);
 
@@ -65,8 +68,8 @@ const RecentTracks = () => {
               </tr>
             </thead>
             <tbody>
-              {RecentlyPlayed.items.map((item, index) =>
-                TableItem(item, index)
+              {RecentlyPlayed.items.map((item) =>
+                TableItem(item)
               )}
             </tbody>
           </table>
