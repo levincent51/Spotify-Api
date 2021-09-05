@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { spotifyApi } from "../components/spotifyAPI";
+import { spotifyApi, token, getAccessToken } from "../components/spotifyAPI";
 import TrackInfo from "../components/TrackInfo";
 
 const TopTracks = () => {
@@ -29,11 +29,11 @@ const TopTracks = () => {
             items: response.items,
           });
         }
-      });
+      })
+      .catch(() => {
+        getAccessToken()
+      });;
 
-    spotifyApi.getNewReleases().then((response) => {
-      console.log(response);
-    });
   }, [timeRange]);
 
   return (
@@ -72,7 +72,6 @@ const TopTracks = () => {
                 <TrackInfo key={key} track={track} />
               ))}
             </div>
-
             <div
               className={
                 toggleState === 2 ? "content  active-content" : "content"
@@ -82,7 +81,6 @@ const TopTracks = () => {
                 <TrackInfo key={key} track={track} />
               ))}
             </div>
-
             <div
               className={
                 toggleState === 3 ? "content  active-content" : "content"
@@ -94,6 +92,7 @@ const TopTracks = () => {
             </div>
           </div>
         ) : (
+
           <b>LOADING</b>
         )}
       </div>
