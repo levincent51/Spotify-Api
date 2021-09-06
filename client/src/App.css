@@ -147,8 +147,15 @@ button {
 
 }
 
+.recently-played {
+  margin:auto;
+  width: auto;
+  width: 80%;
+}
+
 table {
-  width: 100%;
+
+
   text-align: left;
   margin: 10px;
   border-collapse: collapse;
@@ -224,7 +231,4 @@ tr:focus-within {
   background-color: white;
   bottom: 0;
 }
-.recently-played {
-  margin:auto;
-  width: 80%;
-}
+

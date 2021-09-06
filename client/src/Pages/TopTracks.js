@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { spotifyApi, token, getAccessToken } from "../components/spotifyAPI";
+import { spotifyApi, getAccessToken } from "../components/spotifyAPI";
 import TrackInfo from "../components/TrackInfo";
 
 const TopTracks = () => {

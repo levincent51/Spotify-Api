@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from "react";
-import { spotifyApi, token, getAccessToken } from "../components/spotifyAPI";
+import { spotifyApi, getAccessToken } from "../components/spotifyAPI";
 import format from "date-fns/format";
 import { millisToMinutesAndSeconds } from "../components/functions";
 
