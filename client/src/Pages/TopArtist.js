@@ -5,27 +5,29 @@ import { spotifyApi, getAccessToken } from "../components/spotifyAPI";
 // LOGIC WORKSSS RECURSION
 const getplaylists = async (playlists, limit, offset) => {
     const newOffset = offset + limit
-    console.log(playlists)
-    const result =  await spotifyApi.getUserPlaylists({
+    var newPlaylist
+    await spotifyApi.getUserPlaylists({
         limit: limit,
         offset: offset,
     }).then((response) => {
         if (response) {
-            console.log(response)
-            const newPlaylist = [...playlists, ...response.items] ;
-            console.log(newPlaylist)
+            newPlaylist = [...playlists, ...response.items] ;
             if (response.next) {
-                getplaylists(newPlaylist, limit, newOffset)
+                newPlaylist = getplaylists(newPlaylist, limit, newOffset)
             } 
         }
     }).catch(() => {
         getAccessToken()
     })
-    return result
+    return newPlaylist
 }
 
+console.log(spotifyApi.getUserPlaylists({
+    limit: 10,
+    offset: 0,
+}))
 
-console.log(getplaylists([],10,0))
+console.log(getplaylists([],7,0))
 
 
 const Reccommendations = () => {
