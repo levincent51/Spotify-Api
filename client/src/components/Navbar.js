@@ -29,6 +29,17 @@ const Navbar = () => {
           RecentlyPlayed
         </NavLink>
       </li>
+      <li>
+        <NavLink
+          to="/Recommendations"
+          activeStyle={{
+            fontWeight: "bold",
+            color: "green",
+          }}
+        >
+          Recommendations
+        </NavLink>
+      </li>
       <li style={{ float: "right" }}>
   
         <NavLink to="/logout">Logout</NavLink>
