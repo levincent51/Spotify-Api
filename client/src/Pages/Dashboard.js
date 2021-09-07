@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { LogoutButton } from "../components/functions";
 import Navbar from "../components/Navbar";
 import TopTracks from "./TopTracks";
-import Reccommendations from "./TopArtist";
+import Reccommendations from "./Reccomendations";
 import RecentTracks from "./RecentTracks";
 import SpotifyPlayer from "react-spotify-web-playback";
 import { spotifyApi, token, getAccessToken } from "../components/spotifyAPI";
