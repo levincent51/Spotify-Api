@@ -8,21 +8,6 @@ import RecentTracks from "./RecentTracks";
 import SpotifyPlayer from "react-spotify-web-playback";
 import { spotifyApi, token, getAccessToken } from "../components/spotifyAPI";
 
-// Find the best songs to fit your mood from your playlists:
-// sad songs: energy : less than 0.5 happy songs have more energy and dancibility VALENCE HIGH HAPPY LOW SAD
-// study songs have high instrumentals low speechiness
-
-/*
-Danceability: The degree of how suitable a track is for dancing based on tempo, rhythm stability, beat strength, and overall regularity. (0~1)
-Energy: The perceptual measure of intensity based on dynamic range, perceived loudness, timbre, onset rate, and general entropy. (0~1)
-Key: The estimated overall pitch class of the track and its type of scale from which its melodic content is derived.
-Loudness: The quality of a sound that is the primary psychological correlate of amplitude in decibel. (-60~0)
-Speechiness: The presence of spoken words in a track. (0~1)
-Acousticness: The confidence measure whether the track is acoustic. (0~1)
-Liveness: The presence of an audience in the recording. Higher liveness values represent an increased probability that the track was performed live. (0~1)
-Valence: The musical positiveness conveyed by a track (e.g. happy, cheerful, euphoric). (0~1)
-Tempo: The overall estimated tempo of a track in beats per minute (BPM). (±50~200)
-*/
 
 export default function Dashboard() {
   // TODO: This takes too many requests, remove for now
@@ -68,7 +53,7 @@ export default function Dashboard() {
             <Reccommendations />
           </Route>
           <Route path="/">
-            <h1>WELCOME TO SPOTIFY API</h1>
+            <h1>Welcome to Spoti-FYI</h1>
           </Route>
         </Switch>
         {/*isPlaying ? (
