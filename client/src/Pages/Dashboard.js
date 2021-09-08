@@ -9,6 +9,7 @@ import SpotifyPlayer from "react-spotify-web-playback";
 import { spotifyApi, token, getAccessToken } from "../components/spotifyAPI";
 
 
+
 export default function Dashboard() {
   // TODO: This takes too many requests, remove for now
   /*const [isPlaying, setIsPlaying] = useState(false);
