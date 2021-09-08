@@ -24,6 +24,7 @@ export function millisToMinutesAndSeconds(millis) {
 
 export const LogoutButton = () => {
   window.localStorage.clear();
+  window.sessionStorage.clear();
   window.location.replace("/");
   const [loggedOut, setLoggedOut] = useState(false);
 

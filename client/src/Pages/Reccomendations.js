@@ -1,7 +1,7 @@
 import TrackInfo from "../components/TrackInfo";
 import React, { useState, useEffect } from "react";
 import { spotifyApi, token, getAccessToken } from "../components/spotifyAPI";
-
+import fetchData from "../components/UserSongs";
 // CHOOSE YOUR MOODS: SAD, GYM, GROOVY(DANCE), HAPPY, STUDY, chill glad
 // GET AUDIOFEATURES OF SEVERAL TRACKS
 // GET ALL TRACKS FROM PLAYLIST, THEN ALL TRACJKS FROM SAVED
@@ -32,9 +32,9 @@ const getplaylists = async (playlists, limit, offset) => {
     }).then((response) => {
         if (response) {
             newPlaylist = [...playlists, ...response.items] ;
-            /*if (response.next) {
+            if (response.next) {
                 newPlaylist = getplaylists(newPlaylist, limit, newOffset)
-            } */
+            } 
         }
     }).catch(() => {
         getAccessToken()
@@ -52,47 +52,104 @@ const getTrackfromPlaylist = async (playlistId, tracks, limit, offset) => {
         offset: offset,}).then((response) => {
         if (response) {
             newTrack = [...tracks, ...response.items] ;
-            /*if (response.next) {
+            if (response.next) {
                 newTrack = getTrackfromPlaylist(playlistId, newTrack, limit, newOffset)
-            } */
+            } 
         }
     })
 
     return newTrack // AFTER THIS ARRAY.JOIN THEM ALL TO GET ALL THE track IDS WE NEED
 }
 
-const getAllSongs = async (res) => {
-    const c = await getTrackfromPlaylist(res,[],3,0).then( (response) => {
+
+const getAllSongs = (res) => {
+    const c = getTrackfromPlaylist(res,[],100,0).then( (response) => {
         if (response) { 
-            return response.map(x => x.track.id) 
+            return response.map(x => x.track.id)
+            //response.map(x => x.track.id) 
         }
     })
 
     return c
 }
 
+function arraySplice(array) {
+    var a = array
+    var spliced = []
+    if (array) {
+        while (a.length) {
+            spliced = [...spliced, a.splice(0,100)]
+        }
+
+    }
+    return spliced
+
+}
+
 
 const Reccommendations = () => {
-
-    console.log(1)
-
+    const [finished, setFinished] = useState(false)
+    const [audioFet, setAudioFet] = useState()
     const [allSongs, setAllSongs] = useState()
+    const [songs, setSongs] = useState()
+
+
+    
+  
+    const audio_feat = JSON.parse(window.sessionStorage.getItem('audio_features'))
+    const tracks = JSON.parse(window.sessionStorage.getItem('tracks'))
+    console.log(audio_feat, tracks)
 
     useEffect(() => {
-        async function fetchData() {
-            await getplaylists([],2,0).then(
-                async (response) => {
-                    var all_songs = []
-                    for (const index of response.map(x => x.id)) {
-                        all_songs = [...all_songs, ...await getAllSongs(index)]
-                    }
-                
-                    setAllSongs(all_songs)
-            })  
-        }
-        fetchData()
+       if (!tracks) {
+            async function fetchData() {
+                await getplaylists([],50,0).then(
+                    async (response) => {
+                        var all_songs = []
+                        for (const index of response.map(x => x.id)) {
+                            all_songs = [...all_songs, ...await getAllSongs(index)]
+                        }
+                        console.log(all_songs)
+                        // instead of set state maybe import this from home
+                        setAllSongs(all_songs)
+                        window.sessionStorage.setItem('tracks', JSON.stringify(all_songs))
+                })  
+            }
+            fetchData()
+       } else {
+            setAllSongs(tracks)
+       }
+
 
     }, []);
+
+
+    useEffect(() => {
+        console.log(allSongs)
+        if (!audio_feat) {
+            if (allSongs) {
+                var all_audio = []
+                console.log('Fetching all songs...')
+                const allSongsSpliced = arraySplice(allSongs)
+    
+                async function get(all_audio) {
+                    for (const index of allSongsSpliced) {
+                        const c = await spotifyApi.getAudioFeaturesForTracks(index)
+                        all_audio = [...all_audio, ...c.audio_features]
+                    }
+                    setAudioFet(all_audio)
+                    window.sessionStorage.setItem('audio_features', JSON.stringify(all_audio))
+                }
+                console.log('Fetching audio data...')
+                get(all_audio)
+            }
+        } else {
+            setAudioFet(audio_feat)
+        }
+        
+
+    }, [allSongs])
+
 
 /*
 const Reccommendations = () => {
@@ -121,22 +178,15 @@ const Reccommendations = () => {
         
     }, []);
 */
-    console.log(allSongs)
-
-
-    /*
     useEffect(() => {
-        var all_songs = []
-        playlists.forEach((res) => {
-            getTrackfromPlaylist(res,[],3,0).then( (response) => {
-                if (response) {
-                    all_songs = [...all_songs, ...response.map(x => x.track.id)] 
-                    setAllSongs(all_songs)
-                }
-            })
-        })
+        if(allSongs) {
+            setSongs(1)
+            console.log(2)
+        }
 
-    }, [playlists]);*/
+    }, [allSongs])
+
+
 
     /* var a = YOUR_ARRAY;
 while(a.length) {
@@ -173,8 +223,14 @@ while(a.length) {
     };
 
     return (
-        <div>{allSongs ? (
+        <>
+        <h1> Gather all the songs from all your playlists and find which songs statistically 
+        follow these moods 
+        </h1>
+        <h2>Songs Discovered: {allSongs? allSongs.length : <>0</>}</h2>
+        <div>{songs ? (
             <div className="container">
+
             <div className="bloc-tabs">
               <button
                 className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
@@ -196,7 +252,38 @@ while(a.length) {
               </button>
             </div>
             </div>
-        ) : (<b>loading</b>)}</div>
+        ) : (<b>Fetching all Songs....</b>)}</div>
+
+
+        {audioFet ? (
+          <div className="content-tabs">
+            <div
+              className={
+                toggleState === 1 ? "content  active-content" : "content"
+              }
+            >
+                1
+            </div>
+            <div
+              className={
+                toggleState === 2 ? "content  active-content" : "content"
+              }
+            >
+                2
+            </div>
+            <div
+              className={
+                toggleState === 3 ? "content  active-content" : "content"
+              }
+            >
+                3
+            </div>
+          </div>
+        ) : (
+
+          <b>Fetching Audio Data...</b>
+        )}
+        </>
         /* {tracks.items.map((track, key) => (
                 <TrackInfo key={key} track={track}*/
     )
