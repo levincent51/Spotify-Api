@@ -109,23 +109,22 @@ const Reccommendations = () => {
                         for (const index of response.map(x => x.id)) {
                             all_songs = [...all_songs, ...await getAllSongs(index)]
                         }
-                        console.log(all_songs)
+                        //console.log(all_songs)
                         // instead of set state maybe import this from home
                         setAllSongs(all_songs)
                         window.sessionStorage.setItem('tracks', JSON.stringify(all_songs))
                 })  
             }
             fetchData()
-       } else {
+       } 
             setAllSongs(tracks)
-       }
-
+       
 
     }, []);
 
 
     useEffect(() => {
-        console.log(allSongs)
+        //console.log(allSongs)
         if (!audio_feat) {
             if (allSongs) {
                 var all_audio = []
@@ -143,9 +142,9 @@ const Reccommendations = () => {
                 console.log('Fetching audio data...')
                 get(all_audio)
             }
-        } else {
+        } 
             setAudioFet(audio_feat)
-        }
+    
         
 
     }, [allSongs])
@@ -227,10 +226,10 @@ while(a.length) {
         <h1> Gather all the songs from all your playlists and find which songs statistically 
         follow these moods 
         </h1>
-        <h2>Songs Discovered: {allSongs? allSongs.length : <>0</>}</h2>
+        
         <div>{songs ? (
             <div className="container">
-
+            <h2>Songs Discovered: {audioFet? allSongs.length : <>0</>}</h2>
             <div className="bloc-tabs">
               <button
                 className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
@@ -262,21 +261,21 @@ while(a.length) {
                 toggleState === 1 ? "content  active-content" : "content"
               }
             >
-                1
+                Loading Sad songs :(
             </div>
             <div
               className={
                 toggleState === 2 ? "content  active-content" : "content"
               }
             >
-                2
+                Loading Happy Songs :D
             </div>
             <div
               className={
                 toggleState === 3 ? "content  active-content" : "content"
               }
             >
-                3
+                Loading Study songs.....
             </div>
           </div>
         ) : (
