@@ -1,5 +1,5 @@
 
-const CLIENT_SERVER = "http://localhost:3000/#"; // http://myspotifyi.netlify.app/# http://localhost:3000/#
+const CLIENT_SERVER = "http://localhost:3000/#"; // http://spoti-fyi.netlify.app/# http://localhost:3000/#
 var express = require("express"); // Express web server framework
 var request = require("request"); // "Request" library
 var querystring = require("querystring");

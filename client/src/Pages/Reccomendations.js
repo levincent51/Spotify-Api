@@ -61,10 +61,40 @@ const getTrackfromPlaylist = async (playlistId, tracks, limit, offset) => {
     return newTrack // AFTER THIS ARRAY.JOIN THEM ALL TO GET ALL THE track IDS WE NEED
 }
 
+const getAllSongs = async (res) => {
+    const c = await getTrackfromPlaylist(res,[],3,0).then( (response) => {
+        if (response) { 
+            return response.map(x => x.track.id) 
+        }
+    })
+
+    return c
+}
 
 
+const Reccommendations = () => {
 
+    console.log(1)
 
+    const [allSongs, setAllSongs] = useState()
+
+    useEffect(() => {
+        async function fetchData() {
+            await getplaylists([],2,0).then(
+                async (response) => {
+                    var all_songs = []
+                    for (const index of response.map(x => x.id)) {
+                        all_songs = [...all_songs, ...await getAllSongs(index)]
+                    }
+                
+                    setAllSongs(all_songs)
+            })  
+        }
+        fetchData()
+
+    }, []);
+
+/*
 const Reccommendations = () => {
 
     const [sad, setSad] = useState()
@@ -75,13 +105,12 @@ const Reccommendations = () => {
     const [addSong, setAddSong] = useState()
 
     useEffect(() => {
-        getplaylists([],2,0).then(
+        getplaylists([],4,0).then(
             (response) => {
                 var all_songs = []
                 response.map(x => x.id).forEach((res) => {
-                    getTrackfromPlaylist(res,[],2,0).then( (response) => {
+                    getTrackfromPlaylist(res,[],4,0).then( (response) => {
                         if (response) {
-                            console.log(res,response)
                             all_songs = [...all_songs, ...response.map(x => x.track.id)] 
                             setAddSong(all_songs)
                         }
@@ -91,6 +120,8 @@ const Reccommendations = () => {
             })  
         
     }, []);
+*/
+    console.log(allSongs)
 
 
     /*
@@ -142,7 +173,7 @@ while(a.length) {
     };
 
     return (
-        <div>{addSong ? (
+        <div>{allSongs ? (
             <div className="container">
             <div className="bloc-tabs">
               <button
