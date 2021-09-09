@@ -114,28 +114,30 @@ const Reccommendations = () => {
 
 
     useEffect(() => {
-       if (!trackstorage) {
-            async function fetchData() {
-                var all_songs = []
-                await getplaylists([],50,0).then(
-                    async (response) => {
-                        console.log('Fetching all songs...')
-                        
-                        for await (const index of response.map(x => x.id)) {
-                            all_songs = [...all_songs, ...await getAllSongs(index)]
-                        }
-                
-                        // instead of set state maybe import this from home
-                        setAllSongs(all_songs)
-                        window.sessionStorage.setItem('tracks', JSON.stringify(all_songs))
-                })  
-            }
-            fetchData()
-       } else {
+        if (!trackstorage) {
+        async function fetchData() {
+            var all_songs = []
+            await getplaylists([],50,0).then(
+                async (response) => {
+                    console.log('Fetching all songs...')
+                    
+                    for await (const index of response.map(x => x.id)) {
+                        all_songs = [...all_songs, ...await getAllSongs(index)]
+                    }
+            
+                    // instead of set state maybe import this from home
+                    setAllSongs(all_songs)
+                    window.sessionStorage.setItem('tracks', JSON.stringify(all_songs))
+            })  
+        }
+        fetchData()
+
+        } else {
             console.log('Fetching all songs...')
             setAllSongs(trackstorage)
-           
-       }
+        }
+            
+
     }, []);
     //console.log(allSongs)
 
@@ -158,11 +160,12 @@ const Reccommendations = () => {
                 console.log('Fetching audio data...')
                 get(all_audio)
             }
-        } else {
+
+        } else  {
             console.log('Fetching audio data...')
             setAudioFet(audio_feat)
-
         }
+   
 
     }, [allSongs])
 
@@ -175,9 +178,13 @@ const Reccommendations = () => {
 
     useEffect(() => {
         if (audioFet) {
+            // TODO ADJUST THE FILTERS 
+            
+            const audioFetFix = audioFet.filter(x => x) // some songs have no audio features
+            console.log(audioFetFix)
             if (mood == 'sad') {
                 console.log(':(')
-                const FilteredSplice = arraySplice(audioFet.filter(x => x.valence < 0.2), 50)
+                const FilteredSplice = arraySplice(audioFetFix.filter(x => x.valence < 0.2), 50)
                 spotifyApi.getTracks(FilteredSplice[0].map(x => x.id))
                 .then( (response) => {
                     setTracks(response)
@@ -186,14 +193,14 @@ const Reccommendations = () => {
                 // SET TRACKS IN THIS LOGIC
             } else if (mood == 'happy') {
                 console.log(':)')
-                const FilteredSplice = arraySplice(audioFet.filter(x => x.energy > 0.7), 50)
+                const FilteredSplice = arraySplice(audioFetFix.filter(x => x.energy > 0.7), 50)
                 spotifyApi.getTracks(FilteredSplice[0].map(x => x.id))
                 .then( (response) => {
                     setTracks(response)
                 })
             } else if (mood == 'study') {
                 console.log(':/')
-                const FilteredSplice = arraySplice(audioFet.filter(x => x.danceability < 0.2), 50)
+                const FilteredSplice = arraySplice(audioFetFix.filter(x => x.danceability < 0.2), 50)
                 spotifyApi.getTracks(FilteredSplice[0].map(x => x.id))
                 .then( (response) => {
                     setTracks(response)
