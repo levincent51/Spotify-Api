@@ -47,8 +47,8 @@ const RecentTracks = () => {
         }
       })
       .catch(() => {
-        getAccessToken()
-      });;
+        getAccessToken();
+      });
   }, []);
   console.log(RecentlyPlayed);
 
@@ -67,11 +67,7 @@ const RecentTracks = () => {
                 <th>Played at</th>
               </tr>
             </thead>
-            <tbody>
-              {RecentlyPlayed.items.map((item) =>
-                TableItem(item)
-              )}
-            </tbody>
+            <tbody>{RecentlyPlayed.items.map((item) => TableItem(item))}</tbody>
           </table>
         </div>
       ) : (
