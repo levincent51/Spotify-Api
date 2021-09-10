@@ -9,7 +9,9 @@ const TopTracks = () => {
 	const [timeRange, setTimeRange] = useState("short_term");
 
   	const changeTerm = (newTimeRange) => {
-		setTracks();
+		if (newTimeRange != timeRange) {
+			setTracks()
+		}
 		setTimeRange(newTimeRange);
 	};
 	const toggleTab = (index, time_range) => {
@@ -28,6 +30,7 @@ const TopTracks = () => {
 			setTracks({
 				items: response.items,
 			});
+	
 			}
 		})
 		.catch(() => {
@@ -68,7 +71,7 @@ const TopTracks = () => {
 				}
 				>
 				{tracks.items.map((track, key) => (
-					<TrackInfo key={key} track={track} />
+					<TrackInfo key={key} track={track} index={tracks.items.indexOf(track)} />
 				))}
 				</div>
 				<div
@@ -77,7 +80,7 @@ const TopTracks = () => {
 				}
 				>
 				{tracks.items.map((track, key) => (
-					<TrackInfo key={key} track={track} />
+					<TrackInfo key={key} track={track} index={tracks.items.indexOf(track)} />
 				))}
 				</div>
 				<div
@@ -86,7 +89,7 @@ const TopTracks = () => {
 				}
 				>
 				{tracks.items.map((track, key) => (
-					<TrackInfo key={key} track={track} />
+					<TrackInfo key={key} track={track} index={tracks.items.indexOf(track)}  />
 				))}
 				</div>
 			</div>
