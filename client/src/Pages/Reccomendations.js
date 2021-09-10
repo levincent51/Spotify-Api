@@ -275,7 +275,7 @@ const Reccommendations = () => {
 				) : (
 				<p>Loading Sad songs :(</p>
 				)}
-			</div>Î
+			</div>
 			<div
 				className={
 				toggleState === 2 ? "content  active-content" : "content"
