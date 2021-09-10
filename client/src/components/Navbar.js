@@ -31,13 +31,13 @@ const Navbar = () => {
 		</li>
 		<li>
 			<NavLink
-			to="/Recommendations"
+			to="/Moods"
 			activeStyle={{
 				fontWeight: "bold",
 				color: "green",
 			}}
 			>
-			Recommendations
+			Moods
 			</NavLink>
 		</li>
 		<li style={{ float: "right" }}>

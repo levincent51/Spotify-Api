@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { LogoutButton } from "../components/functions";
 import Navbar from "../components/Navbar";
 import TopTracks from "./TopTracks";
-import Reccommendations from "./Reccomendations";
+import Moods from "./Moods";
 import RecentTracks from "./RecentTracks";
 import SpotifyPlayer from "react-spotify-web-playback";
 import { spotifyApi, token, getAccessToken } from "../components/spotifyAPI";
@@ -50,8 +50,8 @@ useEffect(() => {
 			<Route path="/TopTracks">
 				<TopTracks />
 			</Route>
-			<Route path="/Recommendations">
-				<Reccommendations />
+			<Route path="/Moods">
+				<Moods />
 			</Route>
 			<Route path="/">
 				<h1>Welcome to Spoti-FYI</h1>
