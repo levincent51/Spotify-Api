@@ -142,24 +142,26 @@ h2 {
 
 .recently-played {
   margin: auto;
-  width: auto;
   width: 75%;
 }
 
 @media only screen and (max-width: 760px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
 
-
-
-    .recently-played {
-      margin: 10px;
+  .recently-played {
+      margin: 30px;
+  }
   
-
-    }
   table tr {
     display: block;
-    width: auto;
+    text-align: left;
   }
+
+table {
+  text-align: left;
+  margin: 50px;
+}
+
 
 }
 
