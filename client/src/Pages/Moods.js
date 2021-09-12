@@ -167,9 +167,9 @@ const Moods = () => {
     }
   }, [mood, audioFet]);
 
-  const [value, setValue] = useState(0);
-  const [value1, setValue1] = useState(0);
-  const [value2, setValue2] = useState(0);
+  const [value, setValue] = useState(50);
+  const [value1, setValue1] = useState(50);
+  const [value2, setValue2] = useState(50);
   const [vocal, setVocal] = useState(false);
 
   const handleChange = (event, newValue) => {
@@ -209,7 +209,7 @@ const Moods = () => {
 
             <Slider 
 			  	value={value} 
-			  	onChange={handleChange} 
+			  	onChange={handleChange}
 				aria-labelledby="discrete-slider-small-steps"
 				step={10}
 				marks
