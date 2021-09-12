@@ -1,8 +1,7 @@
 .App {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   text-align: center;
 }
-
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
@@ -28,21 +27,25 @@ h2 {
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .navbar {
-  position: sticky; 
-  top:0;
-  left:0;
-  
+  position: sticky;
+  top: 0;
+  left: 0;
+
   width: 100%;
   background-color: rgb(255, 255, 255);
   display: inline-block;
 }
 
-.navbar  > li {
+.navbar > li {
   float: left;
   display: block;
   color: #f2f2f2;
@@ -52,20 +55,15 @@ h2 {
   font-size: 17px;
 }
 
-
-.navbar  > li > a {
-
+.navbar > li > a {
   text-decoration: none;
   color: black;
   padding: 20px 16px;
   text-decoration: none;
   font-size: 17px;
-
 }
 
-
-
-.navbar  > li:hover {
+.navbar > li:hover {
   background-color: #ddd;
   color: black;
 }
@@ -76,7 +74,7 @@ h2 {
 
 .bloc-tabs {
   display: flex;
-  width:80%;
+  width: 80%;
   margin: auto;
 }
 .tabs {
@@ -91,15 +89,15 @@ h2 {
   position: relative;
   outline: none;
 }
-.tabs:hover{
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+.tabs:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   background: #ebebeb;
 }
-.tabs:not(:last-child){
+.tabs:not(:last-child) {
   border-right: 1px solid rgba(0, 0, 0, 0.274);
 }
 
-.active-tabs  {
+.active-tabs {
   background: white;
   border-bottom: 1px solid transparent;
 }
@@ -115,7 +113,6 @@ h2 {
   height: 5px;
   background: green;
 }
-
 
 .content {
   background: white;
@@ -141,18 +138,32 @@ h2 {
   max-width: 100vh;
   margin: 0 auto;
   padding: 30px;
-
 }
 
 .recently-played {
-  margin:auto;
+  margin: auto;
   width: auto;
   width: 75%;
 }
 
+@media only screen and (max-width: 760px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+
+
+
+    .recently-played {
+      margin: 10px;
+  
+
+    }
+  table tr {
+    display: block;
+    width: auto;
+  }
+
+}
+
 table {
-
-
   text-align: left;
   margin: 10px;
   border-collapse: collapse;
@@ -162,12 +173,13 @@ th,
 td {
   padding: 12px 15px;
   overflow: hidden;
-    transition: 0.3s;
+  transition: 0.3s;
 }
 
 th:last-child,
 td:last-child {
-padding-right: 0; }
+  padding-right: 0;
+}
 
 td > a:first-child {
   display: flex;
@@ -175,26 +187,26 @@ td > a:first-child {
   padding: 10em;
   text-decoration: none;
   color: inherit;
-  }
+}
 
 button {
-font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 tr:hover,
 tr:focus-within {
   background: #ebebeb;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   outline: none;
   transition: 0.3s;
 }
 
 .card {
   /* Add shadows to create the "card" effect */
-  box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
   margin: 20px;
   transition: 0.3s;
-  
+
   display: flex;
 }
 .card img {
@@ -209,10 +221,9 @@ tr:focus-within {
 }
 /* On mouse-over, add a deeper shadow */
 .card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   background: #ebebeb;
 }
-
 
 /* Add some padding inside the card container */
 .containerCard {
@@ -228,4 +239,3 @@ tr:focus-within {
   background-color: white;
   bottom: 0;
 }
-
