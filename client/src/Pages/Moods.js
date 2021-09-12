@@ -1,7 +1,13 @@
 import TrackInfo from "../components/TrackInfo";
 import React, { useState, useEffect } from "react";
-import { spotifyApi, token, getAccessToken } from "../components/spotifyAPI";
-import fetchData from "../components/UserSongs";
+import { spotifyApi, getAccessToken } from "../components/spotifyAPI";
+import {
+  arraySplice,
+  getplaylists,
+  getAllSongs,
+} from "../components/UserSongs";
+import { Slider, Typography, Switch } from "@material-ui/core";
+
 // CHOOSE YOUR MOODS: SAD, GYM, GROOVY(DANCE), HAPPY, STUDY, chill glad
 // GET AUDIOFEATURES OF SEVERAL TRACKS
 // GET ALL TRACKS FROM PLAYLIST, THEN ALL TRACJKS FROM SAVED
@@ -21,103 +27,31 @@ Liveness: The presence of an audience in the recording. Higher liveness values r
 Valence: The musical positiveness conveyed by a track (e.g. happy, cheerful, euphoric). (0~1)
 Tempo: The overall estimated tempo of a track in beats per minute (BPM). (±50~200)*/
 
-// LOGIC WORKSSS RECURSION
-const getplaylists = async (playlists, limit, offset) => {
-	const newOffset = offset + limit;
-	var newPlaylist;
-	await spotifyApi
-	.getUserPlaylists({
-		limit: limit,
-		offset: offset,
-		})
-		.then((response) => {
-		if (response) {
-			console.log(response)
-			newPlaylist = [...playlists, ...response.items];
-			if (response.next) {
-			newPlaylist = getplaylists(newPlaylist, limit, newOffset);
-			}
-		}
-		})
-		.catch(() => {
-		getAccessToken();
-	});
-	return newPlaylist;
-};
-
-const getTrackfromPlaylist = async (playlistId, tracks, limit, offset) => {
-	const newOffset = offset + limit;
-	var newTrack;
-	await spotifyApi
-		.getPlaylistTracks(token, playlistId, { limit: limit, offset: offset })
-		.then((response) => {
-		if (response) {
-			newTrack = [...tracks, ...response.items];
-			if (response.next) {
-			newTrack = getTrackfromPlaylist(
-				playlistId,
-				newTrack,
-				limit,
-				newOffset
-			);
-			}
-		}
-		});
-
-	return newTrack; // AFTER THIS ARRAY.JOIN THEM ALL TO GET ALL THE track IDS WE NEED
-};
-
-
-
-const getAllSongs = (res) => {
-	const c = getTrackfromPlaylist(res, [], 100, 0).then((response) => {
-		if (response) {
-		return response.map((x) => x.track.id);
-		//response.map(x => x.track.id)
-		}
-	});
-
-	return c;
-};
-
-function arraySplice(array, size) {
-	var a = array;
-	var spliced = [];
-	if (array) {
-		while (a.length) {
-		spliced = [...spliced, a.splice(0, size)];
-		}
-	}
-	return spliced;
-	}
-
 const Moods = () => {
-	const [audioFet, setAudioFet] = useState();
-	const [allSongs, setAllSongs] = useState();
-	const [toggleState, setToggleState] = useState(1);
-	const [mood, setMood] = useState("sad");
-	const [songs, setSongs] = useState();
+  const [playlists, setPlaylists] = useState("all");
+  const [audioFet, setAudioFet] = useState();
+  const [allSongs, setAllSongs] = useState();
+  const [toggleState, setToggleState] = useState(1);
+  const [mood, setMood] = useState("sad");
+  const [songs, setSongs] = useState();
+  const [tracks, setTracks] = useState();
 
-	const [tracks, setTracks] = useState();
+  var audio_feat = JSON.parse(window.sessionStorage.getItem("audio_features"));
+  var trackstorage = JSON.parse(window.sessionStorage.getItem("tracks"));
 
-	var audio_feat = JSON.parse(window.sessionStorage.getItem("audio_features"));
-	var trackstorage = JSON.parse(window.sessionStorage.getItem("tracks"));
+  const getTracksfromList = async (arraysplice) => {
+    var Tracks = { tracks: [] };
 
+    for (var i = 0; i < arraysplice.length; i++) {
+      const c = await spotifyApi.getTracks(arraysplice[i].map((x) => x.id));
+      Tracks.tracks = [...Tracks.tracks, ...c.tracks];
+    }
+    setTracks(Tracks);
+  };
 
-	const getTracksfromList = async (arraysplice) => {
+  // get every songs form every playlist and every saved
 
-		var Tracks = {tracks: []}
-	
-		for (var i = 0; i < arraysplice.length; i++) {
-			const c = await spotifyApi.getTracks(arraysplice[i].map((x) => x.id))
-			Tracks.tracks = [...Tracks.tracks, ...c.tracks]
-		}
-		setTracks(Tracks)
-	}
-
-	// get every songs form every playlist and every saved
-
-	const toggleTab = (index, moods) => {
+  /*const toggleTab = (index, moods) => {
 		console.log(audioFet);
 		if (moods != mood) {
 			setTracks();
@@ -125,72 +59,72 @@ const Moods = () => {
 
 		setMood(moods);
 		setToggleState(index);
-	};
+	};*/
 
-	useEffect(() => {
-		if (!trackstorage) {
-		async function fetchData() {
-			var all_songs = [];
-			await getplaylists([], 50, 0).then(async (response) => {
-			console.log("Fetching all songs...");
+  useEffect(() => {
+    if (!trackstorage) {
+      async function fetchData() {
+        var all_songs = [];
+        await getplaylists([], 50, 0).then(async (response) => {
+          console.log("Fetching all songs...");
 
-				for await (const index of response.map((x) => x.id)) {
-					all_songs = [...all_songs, ...(await getAllSongs(index))];
-				}
+          for await (const index of response.map((x) => x.id)) {
+            all_songs = [...all_songs, ...(await getAllSongs(index))];
+          }
 
-				// instead of set state maybe import this from home
-				// filter duplicates
-				const unique = [...new Set(all_songs)]
-				setAllSongs(unique);
-				window.sessionStorage.setItem("tracks", JSON.stringify(all_songs));
-			});
-		}
-		fetchData();
-		} else {
-		console.log("Fetching all songs...");
-		setAllSongs(trackstorage);
-		}
-	}, []);
-	//console.log(allSongs)
+          // instead of set state maybe import this from home
+          // filter duplicates
+          const unique = [...new Set(all_songs)];
+          setAllSongs(unique);
+          window.sessionStorage.setItem("tracks", JSON.stringify(all_songs));
+        });
+      }
+      fetchData();
+    } else {
+      console.log("Fetching all songs...");
+      setAllSongs(trackstorage);
+    }
+  }, []);
+  //console.log(allSongs)
 
-	useEffect(() => {
-		//console.log(allSongs)
-		if (!audio_feat) {
-			if (allSongs) {
-				var all_audio = [];
+  useEffect(() => {
+    //console.log(allSongs)
+    if (!audio_feat) {
+      if (allSongs) {
+        var all_audio = [];
 
-				const allSongsSpliced = arraySplice(allSongs, 100);
+        const allSongsSpliced = arraySplice(allSongs, 100);
 
-				async function get(all_audio) {
-					for (const index of allSongsSpliced) {
-						const c = await spotifyApi.getAudioFeaturesForTracks(index);
-						all_audio = [...all_audio, ...c.audio_features];
-					}
-					setAudioFet(all_audio);
-					window.sessionStorage.setItem(
-						"audio_features",
-						JSON.stringify(all_audio)
-					);
-				}
-				console.log("Fetching audio data...");
-				get(all_audio);
-			}
-			} else {
-				console.log("Fetching audio data...");
-				setAudioFet(audio_feat);
-			}
-	}, [allSongs]);
+        async function get(all_audio) {
+          for (const index of allSongsSpliced) {
+            const c = await spotifyApi.getAudioFeaturesForTracks(index);
+            all_audio = [...all_audio, ...c.audio_features];
+          }
+          setAudioFet(all_audio);
+          window.sessionStorage.setItem(
+            "audio_features",
+            JSON.stringify(all_audio)
+          );
+        }
+        console.log("Fetching audio data...");
+        get(all_audio);
+      }
+    } else {
+      console.log("Fetching audio data...");
+      setAudioFet(audio_feat);
+    }
+  }, [allSongs]);
 
-	useEffect(() => {
-		if (allSongs) {
-		setSongs(1);
-		}
-	}, [allSongs]);
+  useEffect(() => {
+    if (allSongs) {
+      setSongs(1);
+    }
+  }, [allSongs]);
 
-	useEffect(() => {
-		if (audioFet) {
-		// TODO ADJUST THE FILTERS
-
+  useEffect(() => {
+    if (audioFet) {
+      // TODO ADJUST THE FILTERS
+      /*
 			const audioFetFix = audioFet.filter((x) => x); // some songs have no audio features
 			console.log(audioFetFix);
 			if (mood == "sad") {
@@ -229,32 +163,60 @@ const Moods = () => {
 				}
 
 
-			}
-		}
-	}, [mood, audioFet]);
-	console.log(tracks);
+			}*/
+    }
+  }, [mood, audioFet]);
+  console.log(tracks);
 
-	// NOW FILTER EVERYTHING IN AUDIO FEATURES
+  const [value, setValue] = useState(0);
+  const [value1, setValue1] = useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const handleChange1 = (event, newValue1) => {
+    setValue1(newValue1);
+  };
 
-	// get audio features of everything, then we find songs less than 30 valence and 50energy, and display top 20
+  return (
+    <>
+      <h1>
+        {" "}
+        Gather all your songs and find the perfect songs to match your current
+        mood
+      </h1>
+      <h2>Choose source (in development)</h2>
+      <button> Get All Liked Songs</button>
+      <button> Get All Playlists</button>
+      <button> Get Only Your Playlists</button>
+      <button> Get Everything</button>
+      <div>
+        {songs ? (
+          <div className="container">
+            <h2>
+              Total Songs Discovered: {audioFet ? audioFet.length : <>0</>}
+            </h2>
 
-	// AUDIO FEATURES HOOK
+			<div>
+            <Typography>Mood</Typography>
 
-	// neeed recursion of this logic
+            <Slider value={value} onChange={handleChange} />
+			</div>
+			<div>
+            <Typography>Energy</Typography>
+			
+            <Slider value={value} onChange={handleChange} />
+			</div>
+            <Typography>Groove</Typography>
 
-	return (
-		<>
-		<h1>
-			{" "}
-			Gather all the songs from all your playlists and find the songs that match your current mood
-		</h1>
-		<button> Get All Playlists</button>
-		<button> Get Only Your Playlists</button>
-		<div>
-			{songs ? (
-			<div className="container">
-				<h2>Songs Discovered: {audioFet ? audioFet.length : <>0</>}</h2>
+            <Slider value={value1} onChange={handleChange1} />
+
+			<Typography>Vocals</Typography>
+			<Switch></Switch>
+			
+
+            {/*
 				<div className="bloc-tabs">
+				
 				<button
 					className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
 					onClick={() => toggleTab(1, "sad")}
@@ -279,84 +241,105 @@ const Moods = () => {
 				>
 					Gym >:(
 				</button>
-				</div>
-			</div>
-			) : (
-			<b>Fetching all Songs....</b>
-			)}
-		</div>
-				<p>Songs Found: {tracks? <>{tracks.tracks.length}</> : 0} </p>
-		{audioFet ? (
-			<div className="content-tabs">
-			<div
-				className={
-				toggleState === 1 ? "content  active-content" : "content"
-				}
-			>
-				{tracks ? (
-				<>
-					{tracks.tracks.map((track, key) => (
-					<TrackInfo key={key} track={track} index={tracks.tracks.indexOf(track)} />
-					))}
-				</>
-				) : (
-				<p>Loading Sad songs :(</p>
-				)}
-			</div>
-			<div
-				className={
-				toggleState === 2 ? "content  active-content" : "content"
-				}
-			>
-				{tracks ? (
-				<>
-					{tracks.tracks.map((track, key) => (
-					<TrackInfo key={key} track={track}  index={tracks.tracks.indexOf(track)} />
-					))}
-				</>
-				) : (
-				<p>Loading Happy Songs :D</p>
-				)}
-			</div>
-			<div
-				className={
-				toggleState === 3 ? "content  active-content" : "content"
-				}
-			>
-				{tracks ? (
-				<>
-					{tracks.tracks.map((track, key) => (
-					<TrackInfo key={key} track={track} index={tracks.tracks.indexOf(track)} />
-					))}
-				</>
-				) : (
-					<p>Loading Study Songs :/</p>
+			
+				</div> 
+				*/}
+          </div>
+        ) : (
+          <>
+            <b>Fetching all Songs....</b>
+            <p>
+              Please do not refresh/leave the page while this is occuring.
+            </p>{" "}
+          </>
+        )}
+      </div>
 
-				)}
-			</div>
-			<div
-				className={
-				toggleState === 4 ? "content  active-content" : "content"
-				}
-			>
-				{tracks ? (
-				<>
-					{tracks.tracks.map((track, key) => (
-					<TrackInfo key={key} track={track} index={tracks.tracks.indexOf(track)} />
-					))}
-				</>
-				) : (
-					<p>Loading Gym Songs >:(</p>
-				)}
-			</div>
-			</div>
-		) : (
-			<b>Fetching Audio Data...</b>
-		)}
-		</>
-		/* {tracks.items.map((track, key) => (
-					<TrackInfo key={key} track={track}*/
-	);
+      {audioFet ? (
+        <div className="content-tabs">
+          <p>Songs Found: {tracks ? <>{tracks.tracks.length}</> : 0} </p>
+          <div
+            className={
+              toggleState === 1 ? "content  active-content" : "content"
+            }
+          >
+            {tracks ? (
+              <>
+                {tracks.tracks.map((track, key) => (
+                  <TrackInfo
+                    key={key}
+                    track={track}
+                    index={tracks.tracks.indexOf(track)}
+                  />
+                ))}
+              </>
+            ) : (
+              <p>Loading Sad songs :(</p>
+            )}
+          </div>
+          <div
+            className={
+              toggleState === 2 ? "content  active-content" : "content"
+            }
+          >
+            {tracks ? (
+              <>
+                {tracks.tracks.map((track, key) => (
+                  <TrackInfo
+                    key={key}
+                    track={track}
+                    index={tracks.tracks.indexOf(track)}
+                  />
+                ))}
+              </>
+            ) : (
+              <p>Loading Happy Songs :D</p>
+            )}
+          </div>
+          <div
+            className={
+              toggleState === 3 ? "content  active-content" : "content"
+            }
+          >
+            {tracks ? (
+              <>
+                {tracks.tracks.map((track, key) => (
+                  <TrackInfo
+                    key={key}
+                    track={track}
+                    index={tracks.tracks.indexOf(track)}
+                  />
+                ))}
+              </>
+            ) : (
+              <p>Loading Study Songs :/</p>
+            )}
+          </div>
+          <div
+            className={
+              toggleState === 4 ? "content  active-content" : "content"
+            }
+          >
+            {tracks ? (
+              <>
+                {tracks.tracks.map((track, key) => (
+                  <TrackInfo
+                    key={key}
+                    track={track}
+                    index={tracks.tracks.indexOf(track)}
+                  />
+                ))}
+              </>
+            ) : (
+              <p>Loading Gym Songs >:(</p>
+            )}
+          </div>
+        </div>
+      ) : (
+        <>{songs ? <b>Fetching Audio Data...</b> : null}</>
+      )}
+    </>
+  );
 };
 
 export default Moods;

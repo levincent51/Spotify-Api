@@ -52,6 +52,7 @@ h2 {
   font-size: 17px;
 }
 
+
 .navbar  > li > a {
 
   text-decoration: none;
@@ -146,7 +147,7 @@ h2 {
 .recently-played {
   margin:auto;
   width: auto;
-  width: 80%;
+  width: 75%;
 }
 
 table {

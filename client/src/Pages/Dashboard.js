@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { LogoutButton } from "../components/functions";
 import Navbar from "../components/Navbar";
+import Home from "./Home";
 import TopTracks from "./TopTracks";
 import Moods from "./Moods";
 import RecentTracks from "./RecentTracks";
@@ -35,6 +36,8 @@ useEffect(() => {
 
 //return should return, getTOPTRACKS, make playlist
 // DashBoard should tell us our favourite genre based on our top artist
+
+	
 	return (
 		<BrowserRouter>
 		<div /* will make a header bar FOR ALL OUR BROWSER ROUTES*/>
@@ -54,7 +57,7 @@ useEffect(() => {
 				<Moods />
 			</Route>
 			<Route path="/">
-				<h1>Welcome to Spoti-FYI</h1>
+				<Home />
 			</Route>
 			</Switch>
 			{/*isPlaying ? (
@@ -73,6 +76,7 @@ useEffect(() => {
 			)*/}
 		</div>
 		</BrowserRouter>
+		
 	);
 }
 // ****** NESTED ROUTING
