@@ -166,15 +166,20 @@ const Moods = () => {
 			}*/
     }
   }, [mood, audioFet]);
-  console.log(tracks);
+  
 
   const [value, setValue] = useState(0);
   const [value1, setValue1] = useState(0);
+  const [value2, setValue2] = useState(0);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   const handleChange1 = (event, newValue1) => {
     setValue1(newValue1);
+  };
+  const handleChange2 = (event, newValue2) => {
+    setValue2(newValue2);
   };
 
   return (
@@ -204,11 +209,11 @@ const Moods = () => {
 			<div>
             <Typography>Energy</Typography>
 			
-            <Slider value={value} onChange={handleChange} />
+            <Slider value={value1} onChange={handleChange1} />
 			</div>
             <Typography>Groove</Typography>
 
-            <Slider value={value1} onChange={handleChange1} />
+            <Slider value={value2} onChange={handleChange2} />
 
 			<Typography>Vocals</Typography>
 			<Switch></Switch>
