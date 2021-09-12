@@ -166,11 +166,11 @@ const Moods = () => {
 			}*/
     }
   }, [mood, audioFet]);
-  
 
   const [value, setValue] = useState(0);
   const [value1, setValue1] = useState(0);
   const [value2, setValue2] = useState(0);
+  const [vocal, setVocal] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -180,6 +180,9 @@ const Moods = () => {
   };
   const handleChange2 = (event, newValue2) => {
     setValue2(newValue2);
+  };
+  const handleVocal = () => {
+    setVocal(!vocal);
   };
 
   return (
@@ -201,23 +204,50 @@ const Moods = () => {
               Total Songs Discovered: {audioFet ? audioFet.length : <>0</>}
             </h2>
 
-			<div>
-            <Typography>Mood</Typography>
+            <div>
+              <Typography>Mood</Typography>
 
-            <Slider value={value} onChange={handleChange} />
-			</div>
+            <Slider 
+			  	value={value} 
+			  	onChange={handleChange} 
+				aria-labelledby="discrete-slider-small-steps"
+				step={10}
+				marks
+				min={0}
+				max={100}
+				valueLabelDisplay="auto"
+			/>
+            </div>
+            <div>
+			<Typography>Energy</Typography>
+
+			<Slider 
+			  	value={value1} 
+			  	onChange={handleChange1} 
+				aria-labelledby="discrete-slider-small-steps"
+				step={10}
+				marks
+				min={0}
+				max={100}
+				valueLabelDisplay="auto"
+			/>
+            </div>
 			<div>
-            <Typography>Energy</Typography>
-			
-            <Slider value={value1} onChange={handleChange1} />
-			</div>
             <Typography>Groove</Typography>
 
-            <Slider value={value2} onChange={handleChange2} />
-
-			<Typography>Vocals</Typography>
-			<Switch></Switch>
-			
+			<Slider 
+			  	value={value2} 
+			  	onChange={handleChange2} 
+				aria-labelledby="discrete-slider-small-steps"
+				step={10}
+				marks
+				min={0}
+				max={100}
+				valueLabelDisplay="auto"
+			/>
+			</div>
+            <Typography>Vocals</Typography>
+            <Switch onChange={handleVocal} label="Vocals" />
 
             {/*
 				<div className="bloc-tabs">
