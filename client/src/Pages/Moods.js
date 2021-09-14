@@ -1,5 +1,5 @@
 import TrackInfo from "../components/TrackInfo";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { spotifyApi, getAccessToken } from "../components/spotifyAPI";
 import {
   arraySplice,
@@ -26,6 +26,8 @@ Acousticness: The confidence measure whether the track is acoustic. (0~1)
 Liveness: The presence of an audience in the recording. Higher liveness values represent an increased probability that the track was performed live. (0~1)
 Valence: The musical positiveness conveyed by a track (e.g. happy, cheerful, euphoric). (0~1)
 Tempo: The overall estimated tempo of a track in beats per minute (BPM). (±50~200)*/
+
+
 
 const Moods = () => {
   const [playlists, setPlaylists] = useState("all");
@@ -100,7 +102,8 @@ const Moods = () => {
             const c = await spotifyApi.getAudioFeaturesForTracks(index);
             all_audio = [...all_audio, ...c.audio_features];
           }
-          setAudioFet(all_audio);
+		  const audioWithFeat = all_audio.filter(x => x); // filter out songs without features
+          setAudioFet(audioWithFeat);
           window.sessionStorage.setItem(
             "audio_features",
             JSON.stringify(all_audio)
@@ -167,23 +170,53 @@ const Moods = () => {
     }
   }, [mood, audioFet]);
 
-  const [value, setValue] = useState(50);
-  const [value1, setValue1] = useState(50);
-  const [value2, setValue2] = useState(50);
+
+  const [value, setValue] = useState(0.5);
+  const [value1, setValue1] = useState(0.5);
+  const [value2, setValue2] = useState(0.5);
   const [vocal, setVocal] = useState(false);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setValue(newValue/100);
   };
   const handleChange1 = (event, newValue1) => {
-    setValue1(newValue1);
+    setValue1(newValue1/100);
   };
   const handleChange2 = (event, newValue2) => {
-    setValue2(newValue2);
+    setValue2(newValue2/100);
   };
   const handleVocal = () => {
     setVocal(!vocal);
   };
+
+
+
+  const filterReq = useCallback( async () => {
+	console.log("mood", value);
+	console.log("energy", value1);
+	console.log("groove", value2);
+	console.log("vocal", vocal);
+	const filter = audioFet.filter((x) => 
+	x.valence >= (value - 0.15) && x.valence <= (value + 0.15) &&
+	x.energy >= (value1 - 0.15) && x.energy <= (value1 + 0.15) &&
+	x.danceability >= (value2 - 0.15) && x.danceability <= (value2 + 0.15) 
+	)
+	var filter2;
+	if (vocal) {
+		filter2 = filter.filter((x) => x.instrumentalness <= 0.4)
+
+		console.log(filter2)
+	} else {
+		filter2 = filter.filter((x) => x.instrumentalness >= 0.8)
+		console.log(filter2)
+	}
+
+	const FilteredSplice = arraySplice(filter2,50)
+	console.log(FilteredSplice)
+	getTracksfromList(FilteredSplice)
+
+  })
+  console.log(tracks)
 
   return (
     <>
@@ -198,8 +231,7 @@ const Moods = () => {
       <button> Get Only Your Playlists</button>
       <button> Get Everything</button>
       <div>
-        {songs ? (
-          <div className="container">
+        {songs ? ( <div className="container">
             <h2>
               Total Songs Discovered: {audioFet ? audioFet.length : <>0</>}
             </h2>
@@ -207,47 +239,49 @@ const Moods = () => {
             <div>
               <Typography>Mood</Typography>
 
-            <Slider 
-			  	value={value} 
-			  	onChange={handleChange}
-				aria-labelledby="discrete-slider-small-steps"
-				step={10}
-				marks
-				min={0}
-				max={100}
-				valueLabelDisplay="auto"
-			/>
+              <Slider
+                value={value *100}
+                onChange={handleChange}
+                aria-labelledby="discrete-slider-small-steps"
+                step={10}
+                marks
+                min={0}
+                max={100}
+                valueLabelDisplay="auto"
+              />
             </div>
             <div>
-			<Typography>Energy</Typography>
+              <Typography>Energy</Typography>
 
-			<Slider 
-			  	value={value1} 
-			  	onChange={handleChange1} 
-				aria-labelledby="discrete-slider-small-steps"
-				step={10}
-				marks
-				min={0}
-				max={100}
-				valueLabelDisplay="auto"
-			/>
+              <Slider
+                value={value1 *100}
+                onChange={handleChange1}
+                aria-labelledby="discrete-slider-small-steps"
+                step={10}
+                marks
+                min={0}
+                max={100}
+                valueLabelDisplay="auto"
+              />
+            </div>
+            <div>
+              <Typography>Groove</Typography>
+
+              <Slider
+                value={value2 *100}
+                onChange={handleChange2}
+                aria-labelledby="discrete-slider-small-steps"
+                step={10}
+                marks
+                min={0}
+                max={100}
+                valueLabelDisplay="auto"
+              />
             </div>
 			<div>
-            <Typography>Groove</Typography>
-
-			<Slider 
-			  	value={value2} 
-			  	onChange={handleChange2} 
-				aria-labelledby="discrete-slider-small-steps"
-				step={10}
-				marks
-				min={0}
-				max={100}
-				valueLabelDisplay="auto"
-			/>
-			</div>
             <Typography>Vocals</Typography>
             <Switch onChange={handleVocal} label="Vocals" />
+			</div>
 
             {/*
 				<div className="bloc-tabs">
@@ -279,7 +313,7 @@ const Moods = () => {
 			
 				</div> 
 				*/}
-          </div>
+        </div>
         ) : (
           <>
             <b>Fetching all Songs....</b>
@@ -293,6 +327,10 @@ const Moods = () => {
       {audioFet ? (
         <div className="content-tabs">
           <p>Songs Found: {tracks ? <>{tracks.tracks.length}</> : 0} </p>
+
+		  <div>
+			<button onClick={filterReq}>Find Songs!</button>
+			</div>
           <div
             className={
               toggleState === 1 ? "content  active-content" : "content"
