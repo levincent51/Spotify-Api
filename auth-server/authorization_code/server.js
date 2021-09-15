@@ -1,5 +1,5 @@
 
-const CLIENT_SERVER = "http://spoti-fyi.netlify.app/#"; // http://spoti-fyi.netlify.app/# http://localhost:3000/#
+const CLIENT_SERVER = "http://localhost:3000/#"; // http://spoti-fyi.netlify.app/# http://localhost:3000/#
 var express = require("express"); // Express web server framework
 var request = require("request"); // "Request" library
 var querystring = require("querystring");
@@ -8,7 +8,7 @@ const cors = require("cors");
 
 var client_id = "67e476d47ae849a397e99e88583bb1a1"; // Your client id
 var client_secret = "6ed3f24ecbb74117b8bd5effa4e158d7"; // Your secret
-var redirect_uri = "https://react-express-spotify.herokuapp.com/callback"; //https://react-express-spotify.herokuapp.com/callback Or Your redirect uri http://localhost:8888/callback
+var redirect_uri = "http://localhost:8888/callback"; //https://react-express-spotify.herokuapp.com/callback Or Your redirect uri http://localhost:8888/callback
 
 /**
  * Generates a random string containing numbers and letters
@@ -189,4 +189,4 @@ app.get("/", (req, res) => {
 });
 
 console.log(process.env.PORT);
-app.listen(process.env.PORT);
+app.listen(8888);

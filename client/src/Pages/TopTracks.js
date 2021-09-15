@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { spotifyApi, getAccessToken } from "../components/spotifyAPI";
 import TrackInfo from "../components/TrackInfo";
+import { CircularProgress } from "@material-ui/core";
 
 const TopTracks = () => {
   	const [toggleState, setToggleState] = useState(1);
@@ -94,7 +95,7 @@ const TopTracks = () => {
 				</div>
 			</div>
 			) : (
-			<b>LOADING</b>
+			<CircularProgress/>
 			)}
 		</div>
 		</div>

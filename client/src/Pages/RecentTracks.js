@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import { spotifyApi, getAccessToken } from "../components/spotifyAPI";
 import format from "date-fns/format";
 import { millisToMinutesAndSeconds } from "../components/functions";
+import { CircularProgress } from "@material-ui/core";
 
 const TableItem = (item) => (
   <tr key={item.played_at}>
@@ -71,7 +72,7 @@ const RecentTracks = () => {
           </table>
         </div>
       ) : (
-        <b>LOADING</b>
+        <CircularProgress/>
       )}
     </div>
   );
