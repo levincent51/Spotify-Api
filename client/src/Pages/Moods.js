@@ -6,7 +6,7 @@ import {
   getplaylists,
   getAllSongs,
 } from "../components/UserSongs";
-import { Slider, Typography, Switch } from "@material-ui/core";
+import { Slider, Typography, Switch, CircularProgress } from "@material-ui/core";
 
 // CHOOSE YOUR MOODS: SAD, GYM, GROOVY(DANCE), HAPPY, STUDY, chill glad
 // GET AUDIOFEATURES OF SEVERAL TRACKS
@@ -317,6 +317,7 @@ const Moods = () => {
         ) : (
           <>
             <b>Fetching all Songs....</b>
+            <CircularProgress/>
             <p>
               Please do not refresh/leave the page while this is occuring.
             </p>{" "}
@@ -337,17 +338,19 @@ const Moods = () => {
             }
           >
             {tracks ? (
-              <>
-                {tracks.tracks.map((track, key) => (
+    
+              tracks.tracks.length ? (
+                tracks.tracks.map((track, key) => (
                   <TrackInfo
                     key={key}
                     track={track}
                     index={tracks.tracks.indexOf(track)}
                   />
-                ))}
-              </>
+                ))) : (<p>no songs </p>)
+              
+            
             ) : (
-              <p>Loading Sad songs :(</p>
+              <p>Click the button to find your songs!</p>
             )}
           </div>
           <div
@@ -355,19 +358,7 @@ const Moods = () => {
               toggleState === 2 ? "content  active-content" : "content"
             }
           >
-            {tracks ? (
-              <>
-                {tracks.tracks.map((track, key) => (
-                  <TrackInfo
-                    key={key}
-                    track={track}
-                    index={tracks.tracks.indexOf(track)}
-                  />
-                ))}
-              </>
-            ) : (
-              <p>Loading Happy Songs :D</p>
-            )}
+          
           </div>
           <div
             className={
@@ -409,7 +400,7 @@ const Moods = () => {
           </div>
         </div>
       ) : (
-        <>{songs ? <b>Fetching Audio Data...</b> : null}</>
+        <>{songs ? <><b>Fetching Audio Data...</b> <CircularProgress/></>: null}</>
       )}
     </>
   );

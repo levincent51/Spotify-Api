@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { spotifyApi, getAccessToken } from "../components/spotifyAPI";
+import { CircularProgress } from "@material-ui/core";
 
 const Home = () => {
     const [profile, setProfile] = useState()
@@ -33,7 +34,7 @@ const Home = () => {
             <h2>Hi {profile.display_name.split(' ')[0]} </h2>
             <img src={profile.images[0].url} />
             </>
-            : <p>Loading</p>
+            : <CircularProgress/>
 
         }
         </div>

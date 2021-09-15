@@ -1,5 +1,4 @@
-import TrackInfo from "../components/TrackInfo";
-import React, { useState, useEffect } from "react";
+
 import { spotifyApi, token, getAccessToken } from "../components/spotifyAPI";
 
 
@@ -44,16 +43,21 @@ const getTrackfromPlaylist = async (playlistId, tracks, limit, offset) => {
 			}
 		}
 		});
-
+	
+	
 	return newTrack; // AFTER THIS ARRAY.JOIN THEM ALL TO GET ALL THE track IDS WE NEED
 };
 
 
 
-export const getAllSongs = (res) => {
-	const c = getTrackfromPlaylist(res, [], 100, 0).then((response) => {
+export const getAllSongs = async (res) => {
+	const c = await getTrackfromPlaylist(res, [], 100, 0).then((response) => {
 		if (response) {
-		return response.map((x) => x.track.id);
+
+			const filter = response.filter((x) => x.track)
+
+	
+			return filter.map((x) => x.track.id);
 		//response.map(x => x.track.id)
 		}
 	});
