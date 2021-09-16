@@ -33,7 +33,7 @@ const Moods = () => {
 
   const [audioFet, setAudioFet] = useState();
   const [allSongs, setAllSongs] = useState();
-
+  const [search, setSearch] = useState(false);
   const totalSongs = useRef(0);
 
   const [songs, setSongs] = useState();
@@ -141,7 +141,7 @@ const Moods = () => {
 
   const filterReq = useCallback( async () => {
       setTracks();
-
+      setSearch(true);
       const filter = audioFet.filter((x) => 
       x.valence >= (value - 0.2) && x.valence <= (value + 0.2) &&
       x.energy >= (value1 - 0.2) && x.energy <= (value1 + 0.2) &&
@@ -162,7 +162,6 @@ const Moods = () => {
       getTracksfromList(FilteredSplice)
 
   })
-  console.log(tracks)
 
 
   const marksValence = [
@@ -292,7 +291,7 @@ const Moods = () => {
 		  <div>
 			<button onClick={filterReq}>Find Songs!</button>
 			</div>
-      <p>Click the button to find your songs!</p>
+
             {tracks ? (
     
               tracks.tracks.length ? (
@@ -305,7 +304,9 @@ const Moods = () => {
                 ))) : (<p>no songs </p>)
             
             ) : (
-              <CircularProgress/>
+              search? (<CircularProgress/>) : (<p>Click the button to find your songs!</p>)
+              
+             
             )}
         </div>
       ) : (
