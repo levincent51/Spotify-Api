@@ -22,6 +22,7 @@ const Navbar = () => {
 			activeStyle={{
 				fontWeight: "bold",
 				color: "green",
+				textDecoration: 'underline',
 			}}
 			>
 			Moods
@@ -33,6 +34,7 @@ const Navbar = () => {
 			activeStyle={{
 				fontWeight: "bold",
 				color: "green",
+				textDecoration: 'underline',
 			}}
 			>
 			Top Tracks
@@ -44,6 +46,7 @@ const Navbar = () => {
 			activeStyle={{
 				fontWeight: "bold",
 				color: "green",
+				textDecoration: 'underline',
 			}}
 			>
 			RecentlyPlayed

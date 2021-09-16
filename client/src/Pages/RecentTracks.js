@@ -34,31 +34,30 @@ const RecentTracks = () => {
   const [RecentlyPlayed, setRecentlyPlayed] = useState();
 
   // variable limit? with useeffect to load more maybe on scroll down, limit will change
-  useEffect(() => {
-    spotifyApi
-      .getMyRecentlyPlayedTracks({
-        limit: 50,
-      })
-      .then((response) => {
-        if (response) {
-          console.log(response);
-          setRecentlyPlayed({
-            items: response.items,
-          });
-        }
-      })
-      .catch(() => {
-        getAccessToken();
-      });
-  }, []);
-  console.log(RecentlyPlayed);
+	useEffect(() => {
+		spotifyApi
+		.getMyRecentlyPlayedTracks({
+			limit: 50,
+		})
+		.then((response) => {
+			if (response) {
+			console.log(response);
+			setRecentlyPlayed({
+				items: response.items,
+			});
+			}
+		})
+		.catch(() => {
+			getAccessToken();
+		});
+	}, []);
+	console.log(RecentlyPlayed);
 
-  return (
+  	return (
     <div>
+      <h2>Recently played tracks</h2>
       {RecentlyPlayed ? (
         <div className="recently-played">
-          <h2>Recently played tracks</h2>
-
           <table className="table">
             <thead>
               <tr>
@@ -75,6 +74,6 @@ const RecentTracks = () => {
         <CircularProgress/>
       )}
     </div>
-  );
+  	);
 };
 export default RecentTracks;

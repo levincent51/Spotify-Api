@@ -1,5 +1,5 @@
 import TrackInfo from "../components/TrackInfo";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef} from "react";
 import { spotifyApi, getAccessToken } from "../components/spotifyAPI";
 import {
   arraySplice,
@@ -30,16 +30,18 @@ Tempo: The overall estimated tempo of a track in beats per minute (BPM). (±50~2
 
 
 const Moods = () => {
-  const [playlists, setPlaylists] = useState("all");
+
   const [audioFet, setAudioFet] = useState();
   const [allSongs, setAllSongs] = useState();
-  const [toggleState, setToggleState] = useState(1);
-  const [mood, setMood] = useState("sad");
+
+  const totalSongs = useRef(0);
+
   const [songs, setSongs] = useState();
   const [tracks, setTracks] = useState();
 
   var audio_feat = JSON.parse(window.sessionStorage.getItem("audio_features"));
   var trackstorage = JSON.parse(window.sessionStorage.getItem("tracks"));
+
 
   const getTracksfromList = async (arraysplice) => {
     var Tracks = { tracks: [] };
@@ -48,20 +50,9 @@ const Moods = () => {
       const c = await spotifyApi.getTracks(arraysplice[i].map((x) => x.id));
       Tracks.tracks = [...Tracks.tracks, ...c.tracks];
     }
+
     setTracks(Tracks);
   };
-
-  // get every songs form every playlist and every saved
-
-  /*const toggleTab = (index, moods) => {
-		console.log(audioFet);
-		if (moods != mood) {
-			setTracks();
-		}
-
-		setMood(moods);
-		setToggleState(index);
-	};*/
 
   useEffect(() => {
     if (!trackstorage) {
@@ -79,12 +70,14 @@ const Moods = () => {
           const unique = [...new Set(all_songs)];
           setAllSongs(unique);
           window.sessionStorage.setItem("tracks", JSON.stringify(all_songs));
+          totalSongs.current = unique.length
         });
       }
       fetchData();
     } else {
       console.log("Fetching all songs...");
       setAllSongs(trackstorage);
+      totalSongs.current = trackstorage.length
     }
   }, []);
   //console.log(allSongs)
@@ -124,51 +117,6 @@ const Moods = () => {
     }
   }, [allSongs]);
 
-  useEffect(() => {
-    if (audioFet) {
-      // TODO ADJUST THE FILTERS
-      /*
-			const audioFetFix = audioFet.filter((x) => x); // some songs have no audio features
-			console.log(audioFetFix);
-			if (mood == "sad") {
-				console.log(":(");
-				const FilteredSplice = arraySplice(audioFetFix.filter((x) => x.valence < 0.3 && x.energy < 0.5 && x.danceability < 0.6), 50);
-				console.log(FilteredSplice)
-				if (FilteredSplice) {
-					getTracksfromList(FilteredSplice)
-
-				} else {
-					alert("No matches")
-				}
-				// SET TRACKS IN THIS LOGIC
-			} else if (mood == "happy") {
-				console.log(":)");
-				const FilteredSplice = arraySplice( audioFetFix.filter((x) => x.tempo > 110 && x.speechiness < 0.2 && x.energy > 0.6 && x.danceability > 0.6 && x.valence > 0.6),50);
-				if (FilteredSplice) {
-					getTracksfromList(FilteredSplice)
-				} else {
-					alert("No matches")
-				}
-			} else if (mood == "study") {
-				console.log(":/");
-				const FilteredSplice = arraySplice(audioFetFix.filter((x) =>  x.speechiness < 0.4 && x.energy < 0.55 && x.instrumentalness > 0.7), 50);
-				if (FilteredSplice) {
-					getTracksfromList(FilteredSplice)
-				} else {
-					alert("No matches")
-				}
-			} else if (mood == "gym (mad)") {
-				const FilteredSplice = arraySplice(audioFetFix.filter((x) => x.tempo > 130 && x.energy > 0.65 && x.acousticness < 0.2 && x.liveness > 0.1), 50);
-				if (FilteredSplice) {
-					getTracksfromList(FilteredSplice)
-				} else {
-					alert("No matches")
-				}
-
-
-			}*/
-    }
-  }, [mood, audioFet]);
 
 
   const [value, setValue] = useState(0.5);
@@ -192,31 +140,75 @@ const Moods = () => {
 
 
   const filterReq = useCallback( async () => {
-	console.log("mood", value);
-	console.log("energy", value1);
-	console.log("groove", value2);
-	console.log("vocal", vocal);
-	const filter = audioFet.filter((x) => 
-	x.valence >= (value - 0.15) && x.valence <= (value + 0.15) &&
-	x.energy >= (value1 - 0.15) && x.energy <= (value1 + 0.15) &&
-	x.danceability >= (value2 - 0.15) && x.danceability <= (value2 + 0.15) 
-	)
-	var filter2;
-	if (vocal) {
-		filter2 = filter.filter((x) => x.instrumentalness <= 0.4)
+      setTracks();
 
-		console.log(filter2)
-	} else {
-		filter2 = filter.filter((x) => x.instrumentalness >= 0.8)
-		console.log(filter2)
-	}
+      const filter = audioFet.filter((x) => 
+      x.valence >= (value - 0.2) && x.valence <= (value + 0.2) &&
+      x.energy >= (value1 - 0.2) && x.energy <= (value1 + 0.2) &&
+      x.danceability >= (value2 - 0.2) && x.danceability <= (value2 + 0.2) 
+      )
+      var filter2;
+      if (vocal) {
+        filter2 = filter.filter((x) => x.instrumentalness <= 0.4)
 
-	const FilteredSplice = arraySplice(filter2,50)
-	console.log(FilteredSplice)
-	getTracksfromList(FilteredSplice)
+        console.log(filter2)
+      } else {
+        filter2 = filter.filter((x) => x.instrumentalness >= 0.8)
+        console.log(filter2)
+      }
+
+      const FilteredSplice = arraySplice(filter2,50)
+      console.log(FilteredSplice)
+      getTracksfromList(FilteredSplice)
 
   })
   console.log(tracks)
+
+
+  const marksValence = [
+    {
+      value: 0,
+      label: 'sad',
+    },
+    {
+      value: 50,
+      label: 'neutral',
+    },
+    {
+      value: 100,
+      label: 'happy',
+    },
+  ];
+
+  const marksEnergy = [
+    {
+      value: 0,
+      label: 'chill',
+    },
+    {
+      value: 50,
+      label: 'neutral',
+    },
+    {
+      value: 100,
+      label: 'hype',
+    },
+  ];
+
+  const marksDance = [
+    {
+      value: 0,
+      label: 'calm',
+    },
+    {
+      value: 50,
+      label: 'neutral',
+    },
+    {
+      value: 100,
+      label: 'dance!',
+    },
+  ];
 
   return (
     <>
@@ -233,9 +225,9 @@ const Moods = () => {
       <div>
         {songs ? ( <div className="container">
             <h2>
-              Total Songs Discovered: {audioFet ? audioFet.length : <>0</>}
+              Total Songs Discovered: {totalSongs.current}
             </h2>
-
+          <div className='sliders'>
             <div>
               <Typography>Mood</Typography>
 
@@ -243,8 +235,7 @@ const Moods = () => {
                 value={value *100}
                 onChange={handleChange}
                 aria-labelledby="discrete-slider-small-steps"
-                step={10}
-                marks
+                marks={marksValence}
                 min={0}
                 max={100}
                 valueLabelDisplay="auto"
@@ -257,8 +248,8 @@ const Moods = () => {
                 value={value1 *100}
                 onChange={handleChange1}
                 aria-labelledby="discrete-slider-small-steps"
-                step={10}
-                marks
+
+                marks={marksEnergy}
                 min={0}
                 max={100}
                 valueLabelDisplay="auto"
@@ -271,48 +262,18 @@ const Moods = () => {
                 value={value2 *100}
                 onChange={handleChange2}
                 aria-labelledby="discrete-slider-small-steps"
-                step={10}
-                marks
+ 
+                marks={marksDance}
                 min={0}
                 max={100}
                 valueLabelDisplay="auto"
               />
             </div>
-			<div>
-            <Typography>Vocals</Typography>
-            <Switch onChange={handleVocal} label="Vocals" />
-			</div>
-
-            {/*
-				<div className="bloc-tabs">
-				
-				<button
-					className={toggleState === 1 ? "tabs active-tabs" : "tabs"}
-					onClick={() => toggleTab(1, "sad")}
-				>
-					Sad
-				</button>
-				<button
-					className={toggleState === 2 ? "tabs active-tabs" : "tabs"}
-					onClick={() => toggleTab(2, "happy")}
-				>
-					Happy
-				</button>
-				<button
-					className={toggleState === 3 ? "tabs active-tabs" : "tabs"}
-					onClick={() => toggleTab(3, "study")}
-				>
-					Study
-				</button>
-				<button
-					className={toggleState === 4 ? "tabs active-tabs" : "tabs"}
-					onClick={() => toggleTab(4, "gym (mad)")}
-				>
-					Gym >:(
-				</button>
-			
-				</div> 
-				*/}
+              <div>
+                  <Typography>Vocals</Typography>
+                  <Switch onChange={handleVocal} label="Vocals" />
+              </div>
+          </div>
         </div>
         ) : (
           <>
@@ -326,17 +287,12 @@ const Moods = () => {
       </div>
 
       {audioFet ? (
-        <div className="content-tabs">
+        <div >
           <p>Songs Found: {tracks ? <>{tracks.tracks.length}</> : 0} </p>
-
 		  <div>
 			<button onClick={filterReq}>Find Songs!</button>
 			</div>
-          <div
-            className={
-              toggleState === 1 ? "content  active-content" : "content"
-            }
-          >
+      <p>Click the button to find your songs!</p>
             {tracks ? (
     
               tracks.tracks.length ? (
@@ -347,57 +303,10 @@ const Moods = () => {
                     index={tracks.tracks.indexOf(track)}
                   />
                 ))) : (<p>no songs </p>)
-              
             
             ) : (
-              <p>Click the button to find your songs!</p>
+              <CircularProgress/>
             )}
-          </div>
-          <div
-            className={
-              toggleState === 2 ? "content  active-content" : "content"
-            }
-          >
-          
-          </div>
-          <div
-            className={
-              toggleState === 3 ? "content  active-content" : "content"
-            }
-          >
-            {tracks ? (
-              <>
-                {tracks.tracks.map((track, key) => (
-                  <TrackInfo
-                    key={key}
-                    track={track}
-                    index={tracks.tracks.indexOf(track)}
-                  />
-                ))}
-              </>
-            ) : (
-              <p>Loading Study Songs :/</p>
-            )}
-          </div>
-          <div
-            className={
-              toggleState === 4 ? "content  active-content" : "content"
-            }
-          >
-            {tracks ? (
-              <>
-                {tracks.tracks.map((track, key) => (
-                  <TrackInfo
-                    key={key}
-                    track={track}
-                    index={tracks.tracks.indexOf(track)}
-                  />
-                ))}
-              </>
-            ) : (
-              <p>Loading Gym Songs >:(</p>
-            )}
-          </div>
         </div>
       ) : (
         <>{songs ? <><b>Fetching Audio Data...</b> <CircularProgress/></>: null}</>
