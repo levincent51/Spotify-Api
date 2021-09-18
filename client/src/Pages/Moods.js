@@ -8,14 +8,7 @@ import {
 } from "../components/UserSongs";
 import { Slider, Typography, Switch, CircularProgress } from "@material-ui/core";
 
-// CHOOSE YOUR MOODS: SAD, GYM, GROOVY(DANCE), HAPPY, STUDY, chill glad
-// GET AUDIOFEATURES OF SEVERAL TRACKS
-// GET ALL TRACKS FROM PLAYLIST, THEN ALL TRACJKS FROM SAVED
-
-// Find the best songs to fit your mood from your playlists:
-// sad songs: energy : less than 0.5 happy songs have more energy and dancibility VALENCE HIGH HAPPY LOW SAD
-// study songs have high instrumentals low speechiness
-
+// TODO -> Option to disable some slider options, change cards into grids, then click/hover to get audio features.
 /*
 Danceability: The degree of how suitable a track is for dancing based on tempo, rhythm stability, beat strength, and overall regularity. (0~1)
 Energy: The perceptual measure of intensity based on dynamic range, perceived loudness, timbre, onset rate, and general entropy. (0~1)
