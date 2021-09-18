@@ -62,7 +62,7 @@ const Moods = () => {
           // filter duplicates
           const unique = [...new Set(all_songs)];
           setAllSongs(unique);
-          window.sessionStorage.setItem("tracks", JSON.stringify(all_songs));
+          window.sessionStorage.setItem("tracks", JSON.stringify(unique));
           totalSongs.current = unique.length
         });
       }
@@ -136,20 +136,16 @@ const Moods = () => {
       setTracks();
       setSearch(true);
       const filter = audioFet.filter((x) => 
-      x.valence >= (value - 0.2) && x.valence <= (value + 0.2) &&
-      x.energy >= (value1 - 0.2) && x.energy <= (value1 + 0.2) &&
-      x.danceability >= (value2 - 0.2) && x.danceability <= (value2 + 0.2) 
+      x.valence >= (value - 0.1) && x.valence <= (value + 0.1) &&
+      x.energy >= (value1 - 0.1) && x.energy <= (value1 + 0.1) &&
+      x.danceability >= (value2 - 0.1) && x.danceability <= (value2 + 0.1) 
       )
       var filter2;
       if (vocal) {
         filter2 = filter.filter((x) => x.instrumentalness <= 0.4)
-
-        console.log(filter2)
       } else {
         filter2 = filter.filter((x) => x.instrumentalness >= 0.8)
-        console.log(filter2)
       }
-
       const FilteredSplice = arraySplice(filter2,50)
       console.log(FilteredSplice)
       getTracksfromList(FilteredSplice)
