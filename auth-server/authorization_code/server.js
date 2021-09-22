@@ -165,12 +165,6 @@ app.get("/refresh_token", (req, res) => {
         access_token: access_token,
       });
 
-      /*
-		res.redirect(CLIENT_SERVER +
-			querystring.stringify({
-			access_token: access_token,
-			refresh_token: refresh_token,
-			}));*/
     } else {
       res.redirect(
         "/#" +
@@ -186,5 +180,6 @@ app.get("/", (req, res) => {
   res.redirect(CLIENT_SERVER);
 });
 
+// REMEMBER TO CHANGE APP.LISTEN
 console.log(process.env.PORT);
-app.listen(8888);
+app.listen(process.env.PORT);
