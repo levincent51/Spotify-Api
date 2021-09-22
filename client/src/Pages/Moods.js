@@ -1,12 +1,17 @@
 import TrackInfo from "../components/TrackInfo";
-import React, { useState, useEffect, useCallback, useRef} from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { spotifyApi, getAccessToken } from "../components/spotifyAPI";
 import {
   arraySplice,
   getplaylists,
   getAllSongs,
 } from "../components/UserSongs";
-import { Slider, Typography, Switch, CircularProgress } from "@material-ui/core";
+import {
+  Slider,
+  Typography,
+  Switch,
+  CircularProgress,
+} from "@material-ui/core";
 
 // TODO -> Option to disable some slider options, change cards into grids, then click/hover to get audio features.
 /*
@@ -20,10 +25,7 @@ Liveness: The presence of an audience in the recording. Higher liveness values r
 Valence: The musical positiveness conveyed by a track (e.g. happy, cheerful, euphoric). (0~1)
 Tempo: The overall estimated tempo of a track in beats per minute (BPM). (±50~200)*/
 
-
-
 const Moods = () => {
-
   const [audioFet, setAudioFet] = useState();
   const [allSongs, setAllSongs] = useState();
   const [search, setSearch] = useState(false);
@@ -34,7 +36,6 @@ const Moods = () => {
 
   var audio_feat = JSON.parse(window.sessionStorage.getItem("audio_features"));
   var trackstorage = JSON.parse(window.sessionStorage.getItem("tracks"));
-
 
   const getTracksfromList = async (arraysplice) => {
     var Tracks = { tracks: [] };
@@ -63,14 +64,14 @@ const Moods = () => {
           const unique = [...new Set(all_songs)];
           setAllSongs(unique);
           window.sessionStorage.setItem("tracks", JSON.stringify(unique));
-          totalSongs.current = unique.length
+          totalSongs.current = unique.length;
         });
       }
       fetchData();
     } else {
       console.log("Fetching all songs...");
       setAllSongs(trackstorage);
-      totalSongs.current = trackstorage.length
+      totalSongs.current = trackstorage.length;
     }
   }, []);
   //console.log(allSongs)
@@ -88,7 +89,7 @@ const Moods = () => {
             const c = await spotifyApi.getAudioFeaturesForTracks(index);
             all_audio = [...all_audio, ...c.audio_features];
           }
-		  const audioWithFeat = all_audio.filter(x => x); // filter out songs without features
+          const audioWithFeat = all_audio.filter((x) => x); // filter out songs without features
           setAudioFet(audioWithFeat);
           window.sessionStorage.setItem(
             "audio_features",
@@ -110,91 +111,89 @@ const Moods = () => {
     }
   }, [allSongs]);
 
-
-
   const [value, setValue] = useState(0.5);
   const [value1, setValue1] = useState(0.5);
   const [value2, setValue2] = useState(0.5);
   const [vocal, setVocal] = useState(false);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue/100);
+    setValue(newValue / 100);
   };
   const handleChange1 = (event, newValue1) => {
-    setValue1(newValue1/100);
+    setValue1(newValue1 / 100);
   };
   const handleChange2 = (event, newValue2) => {
-    setValue2(newValue2/100);
+    setValue2(newValue2 / 100);
   };
   const handleVocal = () => {
     setVocal(!vocal);
   };
 
-
-
-  const filterReq = useCallback( async () => {
-      setTracks();
-      setSearch(true);
-      const filter = audioFet.filter((x) => 
-      x.valence >= (value - 0.1) && x.valence <= (value + 0.1) &&
-      x.energy >= (value1 - 0.1) && x.energy <= (value1 + 0.1) &&
-      x.danceability >= (value2 - 0.1) && x.danceability <= (value2 + 0.1) 
-      )
-      var filter2;
-      if (vocal) {
-        filter2 = filter.filter((x) => x.instrumentalness <= 0.4)
-      } else {
-        filter2 = filter.filter((x) => x.instrumentalness >= 0.8)
-      }
-      const FilteredSplice = arraySplice(filter2,50)
-      console.log(FilteredSplice)
-      getTracksfromList(FilteredSplice)
-
-  })
-
+  const filterReq = useCallback(async () => {
+    setTracks();
+    setSearch(true);
+    const filter = audioFet.filter(
+      (x) =>
+        x.valence >= value - 0.1 &&
+        x.valence <= value + 0.1 &&
+        x.energy >= value1 - 0.1 &&
+        x.energy <= value1 + 0.1 &&
+        x.danceability >= value2 - 0.1 &&
+        x.danceability <= value2 + 0.1
+    );
+    var filter2;
+    if (vocal) {
+      filter2 = filter.filter((x) => x.instrumentalness <= 0.4);
+    } else {
+      filter2 = filter.filter((x) => x.instrumentalness >= 0.8);
+    }
+    const FilteredSplice = arraySplice(filter2, 50);
+    console.log(FilteredSplice);
+    getTracksfromList(FilteredSplice);
+  });
 
   const marksValence = [
     {
       value: 0,
-      label: 'sad',
+      label: "sad",
     },
     {
       value: 50,
-      label: 'neutral',
+      label: "neutral",
     },
     {
       value: 100,
-      label: 'happy',
+      label: "happy",
     },
   ];
 
   const marksEnergy = [
     {
       value: 0,
-      label: 'chill',
+      label: "chill",
     },
     {
       value: 50,
-      label: 'neutral',
+      label: "neutral",
     },
     {
       value: 100,
-      label: 'hype',
+      label: "hype",
     },
   ];
 
   const marksDance = [
     {
       value: 0,
-      label: 'calm',
+      label: "calm",
     },
     {
       value: 50,
-      label: 'neutral',
+      label: "neutral",
     },
     {
       value: 100,
-      label: 'dance!',
+      label: "dance!",
     },
   ];
 
@@ -211,62 +210,59 @@ const Moods = () => {
       <button> Get Only Your Playlists</button>
       <button> Get Everything</button>
       <div>
-        {songs ? ( <div className="container">
-            <h2>
-              Total Songs Discovered: {totalSongs.current}
-            </h2>
-          <div className='sliders'>
-            <div>
-              <Typography>Mood</Typography>
-
-              <Slider
-                value={value *100}
-                onChange={handleChange}
-                aria-labelledby="discrete-slider-small-steps"
-                marks={marksValence}
-                min={0}
-                max={100}
-                valueLabelDisplay="auto"
-              />
-            </div>
-            <div>
-              <Typography>Energy</Typography>
-
-              <Slider
-                value={value1 *100}
-                onChange={handleChange1}
-                aria-labelledby="discrete-slider-small-steps"
-
-                marks={marksEnergy}
-                min={0}
-                max={100}
-                valueLabelDisplay="auto"
-              />
-            </div>
-            <div>
-              <Typography>Groove</Typography>
-
-              <Slider
-                value={value2 *100}
-                onChange={handleChange2}
-                aria-labelledby="discrete-slider-small-steps"
- 
-                marks={marksDance}
-                min={0}
-                max={100}
-                valueLabelDisplay="auto"
-              />
-            </div>
+        {songs ? (
+          <div className="container">
+            <h2>Total Songs Discovered: {totalSongs.current}</h2>
+            <div className="sliders">
               <div>
-                  <Typography>Vocals</Typography>
-                  <Switch onChange={handleVocal} label="Vocals" />
+                <Typography>Mood</Typography>
+
+                <Slider
+                  value={value * 100}
+                  onChange={handleChange}
+                  aria-labelledby="discrete-slider-small-steps"
+                  marks={marksValence}
+                  min={0}
+                  max={100}
+                  valueLabelDisplay="auto"
+                />
               </div>
+              <div>
+                <Typography>Energy</Typography>
+
+                <Slider
+                  value={value1 * 100}
+                  onChange={handleChange1}
+                  aria-labelledby="discrete-slider-small-steps"
+                  marks={marksEnergy}
+                  min={0}
+                  max={100}
+                  valueLabelDisplay="auto"
+                />
+              </div>
+              <div>
+                <Typography>Groove</Typography>
+
+                <Slider
+                  value={value2 * 100}
+                  onChange={handleChange2}
+                  aria-labelledby="discrete-slider-small-steps"
+                  marks={marksDance}
+                  min={0}
+                  max={100}
+                  valueLabelDisplay="auto"
+                />
+              </div>
+              <div>
+                <Typography>Vocals</Typography>
+                <Switch onChange={handleVocal} label="Vocals" />
+              </div>
+            </div>
           </div>
-        </div>
         ) : (
           <>
             <b>Fetching all Songs....</b>
-            <CircularProgress/>
+            <CircularProgress />
             <p>
               Please do not refresh/leave the page while this is occuring.
             </p>{" "}
@@ -275,31 +271,38 @@ const Moods = () => {
       </div>
 
       {audioFet ? (
-        <div >
+        <div>
           <p>Songs Found: {tracks ? <>{tracks.tracks.length}</> : 0} </p>
-		  <div>
-			<button onClick={filterReq}>Find Songs!</button>
-			</div>
+          <div>
+            <button onClick={filterReq}>Find Songs!</button>
+          </div>
 
-            {tracks ? (
-    
-              tracks.tracks.length ? (
-                tracks.tracks.map((track, key) => (
-                  <TrackInfo
-                    key={key}
-                    track={track}
-                    index={tracks.tracks.indexOf(track)}
-                  />
-                ))) : (<p>no songs </p>)
-            
+          {tracks ? (
+            tracks.tracks.length ? (
+              tracks.tracks.map((track, key) => (
+                <TrackInfo
+                  key={key}
+                  track={track}
+                  index={tracks.tracks.indexOf(track)}
+                />
+              ))
             ) : (
-              search? (<CircularProgress/>) : (<p>Click the button to find your songs!</p>)
-              
-             
-            )}
+              <p>no songs </p>
+            )
+          ) : search ? (
+            <CircularProgress />
+          ) : (
+            <p>Click the button to find your songs!</p>
+          )}
         </div>
       ) : (
-        <>{songs ? <><b>Fetching Audio Data...</b> <CircularProgress/></>: null}</>
+        <>
+          {songs ? (
+            <>
+              <b>Fetching Audio Data...</b> <CircularProgress />
+            </>
+          ) : null}
+        </>
       )}
     </>
   );

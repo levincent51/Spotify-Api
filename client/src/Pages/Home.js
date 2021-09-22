@@ -3,42 +3,35 @@ import { spotifyApi, getAccessToken } from "../components/spotifyAPI";
 import { CircularProgress } from "@material-ui/core";
 
 const Home = () => {
-    const [profile, setProfile] = useState()
+  const [profile, setProfile] = useState();
 
+  useEffect(() => {
+    spotifyApi
+      .getMe()
+      .then((response) => {
+        setProfile(response);
+      })
+      .catch(() => {
+        getAccessToken();
+      });
+  }, []);
 
-	useEffect(() => {
-		spotifyApi.getMe()
-		.then((response) => {
-			setProfile(response)
+  console.log(profile);
 
-		})
-        .catch(() => {
-            getAccessToken()
-        })
-	},[])
-	
+  return (
+    <div>
+      {profile ? (
+        <>
+          <h1>Welcome to Spoti-FYI.</h1>
 
+          <h2>Hi {profile.display_name.split(" ")[0]} </h2>
+          <img src={profile.images[0].url} />
+        </>
+      ) : (
+        <CircularProgress />
+      )}
+    </div>
+  );
+};
 
-
-	console.log(profile)
-
-
- 
-    return (
-        <div>
-        {profile ? <>
-
-        
-            <h1>Welcome to Spoti-FYI.</h1>
-
-            <h2>Hi {profile.display_name.split(' ')[0]} </h2>
-            <img src={profile.images[0].url} />
-            </>
-            : <CircularProgress/>
-
-        }
-        </div>
-    )
-}
-
-export default Home
+export default Home;
