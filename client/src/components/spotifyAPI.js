@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getHashParams, getObject, setObject } from "./functions";
+import { getHashParams} from "./functions";
 import SpotifyWebApi from "spotify-web-api-js";
 
 const EXPIRATION_TIME = 3600000; // 1 hour
