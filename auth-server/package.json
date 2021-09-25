@@ -12,6 +12,6 @@
     "request": "^2.88.2"
   },
   "scripts": {
-    "start": "node authorization_code/server.js"
+    "start": "node authorisation_code/server.js"
   }
 }

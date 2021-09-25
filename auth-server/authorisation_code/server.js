@@ -1,7 +1,6 @@
 const CLIENT_SERVER = "http://spoti-fyi.netlify.app/#"; // http://spoti-fyi.netlify.app/# http://localhost:3000/#
 var express = require("express"); // Express web server framework
 var request = require("request"); // "Request" library
-var querystring = require("querystring");
 var cookieParser = require("cookie-parser");
 const cors = require("cors");
 
@@ -117,7 +116,7 @@ app.get("/callback", function (req, res) {
         });
 
         // we can also pass the token to the browser to make requests from there
-        res.redirect(CLIENT_SERVER + "/#" + "access_token=" + access_token + 
+        res.redirect(CLIENT_SERVER  + "access_token=" + access_token + 
         "&refresh_token= " + refresh_token);
       } else {
         res.redirect("/#" + "error=" + "invalid_token");
