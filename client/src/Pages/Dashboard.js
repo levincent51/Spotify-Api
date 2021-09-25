@@ -11,7 +11,7 @@ import { spotifyApi, token, getAccessToken } from "../components/spotifyAPI";
 
 export default function Dashboard() {
   // TODO: This takes too many requests, remove for now
-  /*const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 // Note the spotify web player SDK is in beta so performance is janky
 
 useEffect(() => {
@@ -30,7 +30,7 @@ useEffect(() => {
 	});
 	}, 7000);
 	return () => clearInterval(interval);
-}, [isPlaying]);*/
+}, [isPlaying]);
 
   //return should return, getTOPTRACKS, make playlist
   // DashBoard should tell us our favourite genre based on our top artist
@@ -57,7 +57,7 @@ useEffect(() => {
             <Home />
           </Route>
         </Switch>
-        {/*isPlaying ? (
+        {isPlaying ? (
 			<div className="player">
 				<b>Currently Playing</b>
 				<SpotifyPlayer
@@ -70,7 +70,7 @@ useEffect(() => {
 			<div className="player">
 				<b>Currently Not Playing Anything </b>
 			</div>
-			)*/}
+			)}
       </div>
     </BrowserRouter>
   );

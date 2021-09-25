@@ -117,20 +117,10 @@ app.get("/callback", function (req, res) {
         });
 
         // we can also pass the token to the browser to make requests from there
-        res.redirect(
-          CLIENT_SERVER +
-            querystring.stringify({
-              access_token: access_token,
-              refresh_token: refresh_token,
-            })
-        );
+        res.redirect(CLIENT_SERVER + "/#" + "access_token=" + access_token + 
+        "&refresh_token= " + refresh_token);
       } else {
-        res.redirect(
-          "/#" +
-            querystring.stringify({
-              error: "invalid_token",
-            })
-        );
+        res.redirect("/#" + "error=" + "invalid_token");
       }
     });
   }
@@ -166,12 +156,7 @@ app.get("/refresh_token", (req, res) => {
       });
 
     } else {
-      res.redirect(
-        "/#" +
-          querystring.stringify({
-            error: "invalid_token",
-          })
-      );
+      res.redirect("/#" + "error=" + "invalid_token");
     }
   });
 });
