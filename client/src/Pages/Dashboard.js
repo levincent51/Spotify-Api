@@ -14,23 +14,24 @@ export default function Dashboard() {
   const [isPlaying, setIsPlaying] = useState(false);
 // Note the spotify web player SDK is in beta so performance is janky
 
-useEffect(() => {
-	const interval = setInterval( async () => {
-	spotifyApi.getMyCurrentPlaybackState().then((response) => {
-		if (response) {
-		if (response.is_playing) {
-			setIsPlaying(true);
-		}
-		} else if (!response) {
-		setIsPlaying(false);
-		}
-	})
-	.catch(() => {
-		getAccessToken()
-	});
-	}, 7000);
-	return () => clearInterval(interval);
-}, [isPlaying]);
+// 
+  useEffect(() => {
+    const interval = setInterval( async () => {
+    spotifyApi.getMyCurrentPlaybackState().then((response) => {
+      if (response) {
+      if (response.is_playing) {
+        setIsPlaying(true);
+      }
+      } else if (!response) {
+      setIsPlaying(false);
+      }
+    })
+    .catch(() => {
+      getAccessToken()
+    });
+    }, 7000);
+    return () => clearInterval(interval);
+  }, [isPlaying]);
 
   //return should return, getTOPTRACKS, make playlist
   // DashBoard should tell us our favourite genre based on our top artist
