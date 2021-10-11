@@ -12,3 +12,6 @@ Built With:
 - Material UI components
 
 link: https://spoti-fyi.netlify.app/
+
+![image](https://user-images.githubusercontent.com/73628004/136728693-53a4d16a-318e-4561-9a1d-670a9e4b1771.png)
+In development is the feature to filter songs by their audio features to be added to a new playlist
