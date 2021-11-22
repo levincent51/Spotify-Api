@@ -28,6 +28,7 @@ export const refreshAccessToken = async () => {
       window.localStorage.setItem("access_token", access_token);
       window.localStorage.setItem("token_timestamp", Date.now());
       window.location.reload();
+      return access_token;
     })
     .catch((e) => {
       console.log(e);
@@ -65,7 +66,7 @@ export const getAccessToken = () => {
     Date.now() - tokenExpiry > EXPIRATION_TIME
   ) {
     console.log("Token expired, refreshing token");
-    refreshAccessToken();
+    return refreshAccessToken();
 
   }
 
