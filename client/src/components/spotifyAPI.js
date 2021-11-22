@@ -24,11 +24,16 @@ export const refreshAccessToken = async () => {
     .then((res) => {
       const access_token = res.data.access_token;
       console.log("New acccess_token", access_token);
+      spotifyApi.setAccessToken(access_token);
       window.localStorage.setItem("access_token", access_token);
       window.localStorage.setItem("token_timestamp", Date.now());
       window.location.reload();
     })
-    .catch((e) => console.log(e));
+    .catch((e) => {
+      console.log(e);
+      window.localStorage.clear();
+    })
+    .finally(window.location.reload());
 };
 
 // GET TOKEN, REFRESH IF REQUIRED
@@ -61,6 +66,7 @@ export const getAccessToken = () => {
   ) {
     console.log("Token expired, refreshing token");
     refreshAccessToken();
+
   }
 
   const local_access_token = window.localStorage.getItem("access_token");
