@@ -1,4 +1,4 @@
-const CLIENT_SERVER = "http://spoti-fyi.netlify.app/#"; // http://spoti-fyi.netlify.app/# http://localhost:3000/#
+const CLIENT_SERVER = "https://spoti-fyi.netlify.app/#"; // http://spoti-fyi.netlify.app/# http://localhost:3000/#
 var express = require("express"); // Express web server framework
 var request = require("request"); // "Request" library
 var cookieParser = require("cookie-parser");
