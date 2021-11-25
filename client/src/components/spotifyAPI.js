@@ -70,6 +70,7 @@ export const getAccessToken = () => {
   }
 
   const local_access_token = window.localStorage.getItem("access_token");
+  spotifyApi.setAccessToken(local_access_token);
 
   return local_access_token;
 };
@@ -77,3 +78,4 @@ export const getAccessToken = () => {
 // SET OUR TOKEN with our spotify-web-api-js
 export const token = getAccessToken();
 
+ 
