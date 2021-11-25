@@ -2,7 +2,7 @@ import axios from "axios";
 import { getHashParams} from "./functions";
 import SpotifyWebApi from "spotify-web-api-js";
 
-const EXPIRATION_TIME = 3600000; // 1 hour
+const EXPIRATION_TIME = 1000; // 1 hour
 const SERVER = "https://react-express-spotify.herokuapp.com/"; // or https://react-express-spotify.herokuapp.com/ http://localhost:8888
 //REFRESH ACCESS TOKEN EVERY 1 HOUR
 // REFRESH_URI
@@ -65,7 +65,9 @@ export const getAccessToken = () => {
     Date.now() - tokenExpiry > EXPIRATION_TIME
   ) {
     console.log("Token expired, refreshing token");
-    return refreshAccessToken();
+    window.location.reload();
+
+    // return refreshAccessToken();
 
   }
 
