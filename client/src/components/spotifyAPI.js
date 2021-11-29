@@ -65,8 +65,12 @@ export const getAccessToken = () => {
     tokenExpiry !== "undefined" &&
     Date.now() - tokenExpiry > EXPIRATION_TIME
   ) {
-    console.log("Token expired, refreshing token");
-    return refreshAccessToken(); // refresh not wokring for now
+    console.log("Token expired, relog");
+    window.alert("session expired, relog needed");
+    window.localStorage.clear();
+    window.location.reload();
+    return null;
+    // return refreshAccessToken(); // refresh not wokring for now
     // refreshAccessToken();
 
   }
