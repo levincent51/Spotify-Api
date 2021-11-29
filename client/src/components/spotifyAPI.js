@@ -33,7 +33,7 @@ export const refreshAccessToken = async () => {
     })
     .catch((e) => {
       console.log(e);
-      window.localStorage.clear();
+      console.log("REFRESH NOT WOKRING");
     })
 };
 
