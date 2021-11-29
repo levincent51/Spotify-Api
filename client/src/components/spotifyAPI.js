@@ -28,6 +28,7 @@ export const refreshAccessToken = async () => {
       window.localStorage.setItem("access_token", access_token);
       window.localStorage.setItem("token_timestamp", Date.now());
       window.location.reload();
+      
       return access_token;
     })
     .catch((e) => {
