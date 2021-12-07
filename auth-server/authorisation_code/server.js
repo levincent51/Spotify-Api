@@ -28,7 +28,7 @@ var stateKey = "spotify_auth_state";
 
 var app = express();
 
-const corsOptions ={
+const corsOptions = {
   origin:'*', 
   credentials:true,            //access-control-allow-credentials:true
   optionSuccessStatus:200,

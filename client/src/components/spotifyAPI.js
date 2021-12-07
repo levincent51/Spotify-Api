@@ -17,7 +17,7 @@ export const refreshAccessToken = async () => {
   const refresh_token = window.localStorage.getItem("refresh_token");
   axios
     .get(SERVER + "refresh_token", {
-      params: {
+      params: { 
         refresh_token: refresh_token,
       },
     })
