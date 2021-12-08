@@ -50,7 +50,7 @@ const Moods = () => {
 
   useEffect(() => {
     if (!trackstorage) {
-      async function fetchData() {        
+      async function fetchData() {
         var all_songs = [];
         await getplaylists([], 50, 0).then(async (response) => {
           console.log("Fetching all songs...");

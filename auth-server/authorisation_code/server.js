@@ -29,10 +29,10 @@ var stateKey = "spotify_auth_state";
 var app = express();
 
 const corsOptions = {
-  origin:'*', 
-  credentials:true,            //access-control-allow-credentials:true
-  optionSuccessStatus:200,
-}
+  origin: "*",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
 
 // uses our directory and public for serving our html with
 app
@@ -122,8 +122,13 @@ app.get("/callback", function (req, res) {
         });
 
         // we can also pass the token to the browser to make requests from there
-        res.redirect(CLIENT_SERVER  + "/#access_token=" + access_token + 
-        "&refresh_token= " + refresh_token);
+        res.redirect(
+          CLIENT_SERVER +
+            "/#access_token=" +
+            access_token +
+            "&refresh_token= " +
+            refresh_token
+        );
       } else {
         res.redirect("/#" + "error=" + "invalid_token");
       }
@@ -159,7 +164,6 @@ app.get("/refresh_token", (req, res) => {
       res.send({
         access_token: access_token,
       });
-
     } else {
       res.redirect("/#" + "error=" + "invalid_token");
     }

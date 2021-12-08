@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getHashParams} from "./functions";
+import { getHashParams } from "./functions";
 import SpotifyWebApi from "spotify-web-api-js";
 
 const EXPIRATION_TIME = 3600000; // 1 hour
@@ -17,7 +17,7 @@ export const refreshAccessToken = async () => {
   const refresh_token = window.localStorage.getItem("refresh_token");
   axios
     .get(SERVER + "refresh_token", {
-      params: { 
+      params: {
         refresh_token: refresh_token,
       },
     })
@@ -28,13 +28,13 @@ export const refreshAccessToken = async () => {
       window.localStorage.setItem("access_token", access_token);
       window.localStorage.setItem("token_timestamp", Date.now());
       window.location.reload();
-      
+
       return access_token;
     })
     .catch((e) => {
       console.log(e);
       console.log("REFRESH NOT WOKRING");
-    })
+    });
 };
 
 // GET TOKEN, REFRESH IF REQUIRED
@@ -72,7 +72,6 @@ export const getAccessToken = () => {
     return null;
     // return refreshAccessToken(); // refresh not wokring for now
     // refreshAccessToken();
-
   }
 
   const local_access_token = window.localStorage.getItem("access_token");
@@ -83,5 +82,3 @@ export const getAccessToken = () => {
 
 // SET OUR TOKEN with our spotify-web-api-js
 export const token = getAccessToken();
-
- 

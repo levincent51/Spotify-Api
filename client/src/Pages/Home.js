@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { spotifyApi, getAccessToken, refreshAccessToken } from "../components/spotifyAPI";
+import {
+  spotifyApi,
+  getAccessToken,
+  refreshAccessToken,
+} from "../components/spotifyAPI";
 import { CircularProgress } from "@material-ui/core";
 
 const Home = () => {

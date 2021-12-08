@@ -12,23 +12,25 @@ import { spotifyApi, token, getAccessToken } from "../components/spotifyAPI";
 export default function Dashboard() {
   // TODO: This takes too many requests, remove for now
   const [isPlaying, setIsPlaying] = useState(false);
-// Note the spotify web player SDK is in beta so performance is janky
+  // Note the spotify web player SDK is in beta so performance is janky
 
-// 
+  //
   useEffect(() => {
-    const interval = setInterval( async () => {
-    spotifyApi.getMyCurrentPlaybackState().then((response) => {
-      if (response) {
-      if (response.is_playing) {
-        setIsPlaying(true);
-      }
-      } else if (!response) {
-      setIsPlaying(false);
-      }
-    })
-    .catch(() => {
-      getAccessToken()
-    });
+    const interval = setInterval(async () => {
+      spotifyApi
+        .getMyCurrentPlaybackState()
+        .then((response) => {
+          if (response) {
+            if (response.is_playing) {
+              setIsPlaying(true);
+            }
+          } else if (!response) {
+            setIsPlaying(false);
+          }
+        })
+        .catch(() => {
+          getAccessToken();
+        });
     }, 7000);
     return () => clearInterval(interval);
   }, [isPlaying]);
@@ -59,19 +61,19 @@ export default function Dashboard() {
           </Route>
         </Switch>
         {isPlaying ? (
-			<div className="player">
-				<b>Currently Playing</b>
-				<SpotifyPlayer
-				token={token}
-				syncExternalDevice={true}
-				syncExternalDeviceInterval={5}
-				/>
-			</div>
-			) : (
-			<div className="player">
-				<b>Currently Not Playing Anything </b>
-			</div>
-			)}
+          <div className="player">
+            <b>Currently Playing</b>
+            <SpotifyPlayer
+              token={token}
+              syncExternalDevice={true}
+              syncExternalDeviceInterval={5}
+            />
+          </div>
+        ) : (
+          <div className="player">
+            <b>Currently Not Playing Anything </b>
+          </div>
+        )}
       </div>
     </BrowserRouter>
   );
