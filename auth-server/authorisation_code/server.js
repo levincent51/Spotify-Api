@@ -156,10 +156,9 @@ app.get("/refresh_token", (req, res) => {
     json: true,
   };
 
-  request.post(authOptions, function (error, res, body) {
+  request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
       var access_token = body.access_token;
-
       // THIS IS THE CORRECT, REDIRECT VIOLATES CORS POLICIES
       res.send({
         access_token: access_token,
